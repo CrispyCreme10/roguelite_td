@@ -4,14 +4,38 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
-
-    [SerializeField] private float MoveSpeed = 1f;
+    [SerializeField] private DamageController _DamageController;
+    [SerializeField] private float _moveSpeed = 1f;
 
     private Vector3 _moveDirection;
+    private CasterController _casterController;
+
+    void OnEnable()
+    {
+        _DamageController.OnDamageDeal += OnDamageDeal;
+    }
+
+    void OnDisable()
+    {
+        _DamageController.OnDamageDeal -= OnDamageDeal;
+    }
 
     void Update()
     {
-        transform.Translate(_moveDirection * MoveSpeed * Time.deltaTime);
+        transform.Translate(_moveDirection * _moveSpeed * Time.deltaTime);
+    }
+
+    void OnTriggerEnter2D(Collider2D other) 
+    {
+        if (_DamageController != null)
+        {
+            _DamageController.DealDamage(other);
+        }        
+
+        if (other.CompareTag("Boundary"))
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void SetMoveTowardsDir(Vector3 dir)
@@ -19,11 +43,13 @@ public class ProjectileController : MonoBehaviour
         _moveDirection = dir;
     }
 
-    void OnTriggerEnter2D(Collider2D other) 
+    public void SetCasterController(CasterController casterController)
     {
-        if (other.CompareTag("Boundary"))
-        {
-            Destroy(gameObject);
-        }
+        _casterController = casterController;
+    }
+
+    void OnDamageDeal(int damageAmount)
+    {
+        Destroy(gameObject);
     }
 }

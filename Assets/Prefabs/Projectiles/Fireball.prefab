@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: -9116600458230562187}
   - component: {fileID: 1122171785551980692}
   - component: {fileID: -1922419721637577892}
-  - component: {fileID: -8749138348433988973}
   m_Layer: 0
   m_Name: Fireball
   m_TagString: Untagged
@@ -48,7 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b522c84193788e568b1460767a3b2689, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 50
+  _DamageController: {fileID: -9116600458230562187}
+  _moveSpeed: 50
 --- !u!114 &-9116600458230562187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,9 +61,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8c73fb6a8c6a1ef9109e90489f883e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DamageDealer: 1
-  DamageReceiver: 0
-  DamageAmount: 10
+  _damageDealer: 1
+  _damageReceiver: 0
+  _damageAmount: 15
+  _damageTag: 0
+  _receivedDamageTagsIgnored: 
 --- !u!212 &1122171785551980692
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -145,36 +147,9 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!50 &-8749138348433988973
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1876438138396183410}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0

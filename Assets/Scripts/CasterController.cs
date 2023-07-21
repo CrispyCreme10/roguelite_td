@@ -5,7 +5,7 @@ using UnityEngine;
 public class CasterController : MonoBehaviour
 {
     [Header("Refs")]
-    [SerializeField] private GameObject ProjectilePrefab;
+    [SerializeField] private ProjectileController ProjectilePrefab;
     [SerializeField] private GameObject ProjectileSpawnPoint;
 
     [Header("Settings")]
@@ -31,7 +31,8 @@ public class CasterController : MonoBehaviour
         if (_canCast)
         {
             var projectile = Instantiate(ProjectilePrefab, ProjectileSpawnPoint.transform.position, Quaternion.identity);
-            projectile.GetComponent<ProjectileController>().SetMoveTowardsDir(CastDirection);
+            projectile.SetMoveTowardsDir(CastDirection);
+            projectile.SetCasterController(this);
             _canCast = false;
             _timeRemaining = FireRate;
         }
