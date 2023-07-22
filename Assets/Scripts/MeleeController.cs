@@ -10,6 +10,7 @@ public class MeleeController : MonoBehaviour
     [SerializeField] private EnemyController _enemyController;
     [SerializeField] private DamageController _damageController;
     [SerializeField] private MovementController _movementController;
+    [SerializeField] private Transform _crystalTransform;
     [SerializeField] private CircleCollider2D _crystalCollider;
     [SerializeField] private float _meleeRange = 1f;
     [SerializeField] private float _attackSpeed = 1f;
@@ -18,6 +19,11 @@ public class MeleeController : MonoBehaviour
     Collider2D _target;
     bool _canDealDamage = true;
     float _timeRemaining;
+
+    private void Start()
+    {
+        ResetAttackCooldown();
+    }
 
     void OnEnable()
     {
@@ -61,9 +67,6 @@ public class MeleeController : MonoBehaviour
 
     bool IsTargetInRange()
     {
-        // Debug.Log(Vector2.Distance(_enemyController.GetCurrentTarget().transform.position, transform.position));
-        // Debug.Log(_crystalCollider.radius);
-        // Debug.Log(_meleeRange + _crystalCollider.radius);
         return Vector2.Distance(_enemyController.GetCurrentTarget().transform.position, transform.position) <= _meleeRange + _crystalCollider.radius;
     }
 

@@ -5,14 +5,13 @@ using UnityEngine;
 public class SurvivorController : MonoBehaviour
 {
 
+    [SerializeField] private Camera sceneCamera;
+    [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float moveSpeed = 5f;
 
-    private bool _isInboundsTop = true;
-    private bool _isInboundsRight = true;
-    private bool _isInboundsBottom = true;
-    private bool _isInboundsLeft = true;
     private CasterController _casterController;
-
+    private Vector2 _moveDirection;
+    private Vector2 _mousePosition;
     void Awake()
     {
         _casterController = GetComponent<CasterController>();
@@ -20,79 +19,38 @@ public class SurvivorController : MonoBehaviour
 
     void Update()
     {
+        ProcessInputs();
+        
         if (Input.GetButtonDown("Fire1") && _casterController != null)
         {
             var projectileDirection = Input.mousePosition;
-            var dir = Camera.main.ScreenToWorldPoint(projectileDirection) - transform.position;
+            var dir = sceneCamera.ScreenToWorldPoint(projectileDirection) - transform.position;
             dir.z = 0f;
             _casterController.CastProjectile(dir.normalized);
         }
     }
 
-    void FixedUpdate() 
+    private void FixedUpdate() 
     {
         Move();
     }
 
-    void OnTriggerEnter2D(Collider2D other) 
+    private void ProcessInputs()
     {
-        if (other.CompareTag("Boundary") && other.name == "Top")
-        {
-            _isInboundsTop = false;
-        }
-        if (other.CompareTag("Boundary") && other.name == "Right")
-        {
-            _isInboundsRight = false;
-        }
-        if (other.CompareTag("Boundary") && other.name == "Bottom")
-        {
-            _isInboundsBottom = false;
-        }
-        if (other.CompareTag("Boundary") && other.name == "Left")
-        {
-            _isInboundsLeft = false;
-        }
-    }
+        var moveX = Input.GetAxisRaw("Horizontal");
+        var moveY = Input.GetAxisRaw("Vertical");
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Boundary") && other.name == "Top")
-        {
-            _isInboundsTop = true;
-        }
-        if (other.CompareTag("Boundary") && other.name == "Right")
-        {
-            _isInboundsRight = true;
-        }
-        if (other.CompareTag("Boundary") && other.name == "Bottom")
-        {
-            _isInboundsBottom = true;
-        }
-        if (other.CompareTag("Boundary") && other.name == "Left")
-        {
-            _isInboundsLeft = true;
-        }
+        _moveDirection = new Vector2(moveX, moveY).normalized;
+        _mousePosition = sceneCamera.ScreenToWorldPoint(Input.mousePosition);
     }
 
     void Move()
     {
-        var moveX = Input.GetAxisRaw("Horizontal");
-        var moveY = Input.GetAxisRaw("Vertical");
-        if (moveY > 0 && _isInboundsTop)
-        {
-            transform.position += new Vector3(0f, moveY * moveSpeed * Time.deltaTime, 0f);
-        }
-        if (moveY < 0 && _isInboundsBottom)
-        {
-            transform.position += new Vector3(0f, moveY * moveSpeed * Time.deltaTime, 0f);
-        }
-        if (moveX > 0 && _isInboundsRight)
-        {
-            transform.position += new Vector3(moveX * moveSpeed * Time.deltaTime, 0f, 0f);
-        }
-        if (moveX < 0 && _isInboundsLeft)
-        {
-            transform.position += new Vector3(moveX * moveSpeed * Time.deltaTime, 0f, 0f);
-        }
+        rb.velocity = new Vector2(_moveDirection.y * moveSpeed, _moveDirection.y * moveSpeed);
+        
+        // rotate player to follow mouse
+        Vector2 aimDir = _mousePosition - rb.position;
+        float aimAngle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg - 90f;
+        rb.rotation = aimAngle;
     }
 }

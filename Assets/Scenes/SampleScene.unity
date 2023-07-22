@@ -1519,6 +1519,11 @@ CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 1685858999009842241, guid: 4c9a6ddc2de7f4f41afc0c929298f779, type: 3}
   m_PrefabInstance: {fileID: 1589601465023754206}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &509517859 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4695185996083648210, guid: 4c9a6ddc2de7f4f41afc0c929298f779, type: 3}
+  m_PrefabInstance: {fileID: 1589601465023754206}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1581,7 +1586,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1627,7 +1632,7 @@ MonoBehaviour:
   MainCam: {fileID: 519420031}
   ObjectToFollow: {fileID: 283164117}
   ScrollSensitivity: 5
-  MinScroll: 15
+  MinScroll: 10
   MaxScroll: 25
   PositionFromFollow: {x: 0, y: 0, z: -10}
 --- !u!1 &533090903
@@ -6112,6 +6117,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1685858999009842241, guid: 4c9a6ddc2de7f4f41afc0c929298f779, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4695185996083648210, guid: 4c9a6ddc2de7f4f41afc0c929298f779, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -6160,7 +6169,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crystal
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4185189192562358830, guid: 4c9a6ddc2de7f4f41afc0c929298f779, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6173,18 +6183,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2662062975591128969, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: _meleeRange
-      value: 2.5
+    - target: {fileID: 1405307315497111106, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+      propertyPath: _rb
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2662062975591128969, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: _crystalCollider
       value: 
       objectReference: {fileID: 509517854}
-    - target: {fileID: 3456930543360964506, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: _damageDealer
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 2662062975591128969, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+      propertyPath: _crystalTransform
+      value: 
+      objectReference: {fileID: 509517859}
     - target: {fileID: 3466492127235533783, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -6233,13 +6243,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: NormalEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 4306709888161138098, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526071268711371150, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526071268711371150, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7259704263113262468, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7259704263113262468, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7682528544142543789, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: _crystal
@@ -6249,7 +6271,12 @@ PrefabInstance:
       propertyPath: _targetSurvivor
       value: 
       objectReference: {fileID: 283164117}
-    m_RemovedComponents: []
+    - target: {fileID: 7682528544142543789, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+      propertyPath: ChanceToTargetPlayer
+      value: 100
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4526071268711371150, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6262,25 +6289,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4776854584307638849, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4776854584307638849, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
-      propertyPath: m_Size.y
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 1424578885233265681, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
+      propertyPath: sceneCamera
+      value: 
+      objectReference: {fileID: 519420031}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.2
+      value: 2.19
       objectReference: {fileID: 0}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.12
+      value: 0.81
       objectReference: {fileID: 0}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_LocalPosition.z

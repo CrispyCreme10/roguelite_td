@@ -29,7 +29,6 @@ public class DamageController : MonoBehaviour
     public void DealDamage(GameObject other)
     {
         var otherDamageController = other.GetComponent<DamageController>();
-        Debug.Log("Yikes: " + ValidateOtherDamageController(otherDamageController));
         if (_damageDealer && ValidateOtherDamageController(otherDamageController))
         {
             Debug.Log("Deal Damage: " + other.name);

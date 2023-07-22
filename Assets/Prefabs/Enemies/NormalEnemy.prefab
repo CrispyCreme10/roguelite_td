@@ -83,9 +83,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8c73fb6a8c6a1ef9109e90489f883e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damageDealer: 0
+  _damageDealer: 1
   _damageReceiver: 1
-  _damageAmount: 0
+  _damageAmount: 5
   _damageTag: 1
   _receivedDamageTagsIgnored: 
 --- !u!114 &2662062975591128969
@@ -103,7 +103,9 @@ MonoBehaviour:
   _enemyController: {fileID: 7682528544142543789}
   _damageController: {fileID: 3456930543360964506}
   _movementController: {fileID: 1405307315497111106}
-  _meleeRange: 1.5
+  _crystalTransform: {fileID: 0}
+  _crystalCollider: {fileID: 0}
+  _meleeRange: 1
   _attackSpeed: 1
 --- !u!114 &1405307315497111106
 MonoBehaviour:
@@ -293,6 +295,8 @@ MonoBehaviour:
   _enemyController: {fileID: 7682528544142543789}
   _damageController: {fileID: 45064773635748084}
   _movementController: {fileID: 1405307315497111106}
+  _crystalTransform: {fileID: 0}
+  _crystalCollider: {fileID: 0}
   _meleeRange: 1
   _attackSpeed: 1
 --- !u!114 &45064773635748084
