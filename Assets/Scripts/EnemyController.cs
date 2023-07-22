@@ -34,4 +34,9 @@ public class EnemyController : MonoBehaviour
     {
         _crystal = crystal;
     }
+
+    public GameObject GetCurrentTarget()
+    {
+        return IsTargetSurvivor ? TargetSurvivor : Crystal;
+    }
 }

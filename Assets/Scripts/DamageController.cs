@@ -26,6 +26,18 @@ public class DamageController : MonoBehaviour
         }
     }
 
+    public void DealDamage(GameObject other)
+    {
+        var otherDamageController = other.GetComponent<DamageController>();
+        Debug.Log("Yikes: " + ValidateOtherDamageController(otherDamageController));
+        if (_damageDealer && ValidateOtherDamageController(otherDamageController))
+        {
+            Debug.Log("Deal Damage: " + other.name);
+            otherDamageController.ReceivedDamage(_damageAmount);
+            OnDamageDeal?.Invoke(_damageAmount);
+        }
+    }
+
     public bool CanBeAttackedByTag(DamageTag damageTag)
     {
         return !_receivedDamageTagsIgnored.Contains(damageTag);

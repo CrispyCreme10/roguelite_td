@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7682528544142543789}
   - component: {fileID: 3516244062434529765}
   - component: {fileID: 3456930543360964506}
+  - component: {fileID: 2662062975591128969}
   - component: {fileID: 1405307315497111106}
   - component: {fileID: 2269055138645386172}
   - component: {fileID: 5904132123886823286}
@@ -87,6 +88,23 @@ MonoBehaviour:
   _damageAmount: 0
   _damageTag: 1
   _receivedDamageTagsIgnored: 
+--- !u!114 &2662062975591128969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306709888161138098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92c7bcafe5b60a7478edbc6364d0e841, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyController: {fileID: 7682528544142543789}
+  _damageController: {fileID: 3456930543360964506}
+  _movementController: {fileID: 1405307315497111106}
+  _meleeRange: 1.5
+  _attackSpeed: 1
 --- !u!114 &1405307315497111106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,7 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyController: {fileID: 7682528544142543789}
   _rb: {fileID: 4526071268711371150}
-  _moveSpeed: 3
+  _moveSpeed: 4
 --- !u!212 &2269055138645386172
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -244,7 +262,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3784357704848806157
 Transform:
   m_ObjectHideFlags: 0
@@ -275,7 +293,7 @@ MonoBehaviour:
   _enemyController: {fileID: 7682528544142543789}
   _damageController: {fileID: 45064773635748084}
   _movementController: {fileID: 1405307315497111106}
-  _meleeRange: {fileID: 2417089146453719914}
+  _meleeRange: 1
   _attackSpeed: 1
 --- !u!114 &45064773635748084
 MonoBehaviour:

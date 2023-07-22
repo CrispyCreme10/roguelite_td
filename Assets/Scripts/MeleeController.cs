@@ -10,7 +10,8 @@ public class MeleeController : MonoBehaviour
     [SerializeField] private EnemyController _enemyController;
     [SerializeField] private DamageController _damageController;
     [SerializeField] private MovementController _movementController;
-    [SerializeField] private Collider2D _meleeRange;
+    [SerializeField] private CircleCollider2D _crystalCollider;
+    [SerializeField] private float _meleeRange = 1f;
     [SerializeField] private float _attackSpeed = 1f;
 
     bool _isTargetInRange;
@@ -30,13 +31,21 @@ public class MeleeController : MonoBehaviour
 
     void Update()
     {
-        if (!_isTargetInRange) return;
+        if (!IsTargetInRange()) 
+        {
+            _movementController.SetMove(true);
+            return;
+        }
+
+        // Debug.Log("In Range");
+        _movementController.SetMove(false);
         
         if (_canDealDamage)
         {
             if (_damageController != null)
             {
                 Attack();
+                UpdateCanDealDamage(false);
             }
         }
         else
@@ -50,43 +59,51 @@ public class MeleeController : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter2D(Collision2D other)
+    bool IsTargetInRange()
     {
-        Debug.Log("Collision Enter");
-        _target = other.collider;
-        _isTargetInRange = true;
-        ResetAttackCooldown();
-        _movementController.SetMove(false);
+        // Debug.Log(Vector2.Distance(_enemyController.GetCurrentTarget().transform.position, transform.position));
+        // Debug.Log(_crystalCollider.radius);
+        // Debug.Log(_meleeRange + _crystalCollider.radius);
+        return Vector2.Distance(_enemyController.GetCurrentTarget().transform.position, transform.position) <= _meleeRange + _crystalCollider.radius;
     }
 
-    void OnCollisionExit2D(Collision2D other)
-    {
-        Debug.Log("Collision Exit");
-        _target = null;
-        _isTargetInRange = false;
-        _movementController.SetMove(true);
-    }
+    // void OnCollisionEnter2D(Collision2D other)
+    // {
+    //     Debug.Log("Collision Enter");
+    //     _target = other.collider;
+    //     _isTargetInRange = true;
+    //     ResetAttackCooldown();
+    //     _movementController.SetMove(false);
+    // }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        Debug.Log("Trigger Enter");
-        _target = other;
-        _isTargetInRange = true;
-        ResetAttackCooldown();
-        _movementController.SetMove(false);
-    }
+    // void OnCollisionExit2D(Collision2D other)
+    // {
+    //     Debug.Log("Collision Exit");
+    //     _target = null;
+    //     _isTargetInRange = false;
+    //     _movementController.SetMove(true);
+    // }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        Debug.Log("Trigger Exit");
-        _target = null;
-        _isTargetInRange = false;
-        _movementController.SetMove(true);
-    }
+    // void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     Debug.Log("Trigger Enter");
+    //     _target = other;
+    //     _isTargetInRange = true;
+    //     ResetAttackCooldown();
+    //     _movementController.SetMove(false);
+    // }
+
+    // void OnTriggerExit2D(Collider2D other)
+    // {
+    //     Debug.Log("Trigger Exit");
+    //     _target = null;
+    //     _isTargetInRange = false;
+    //     _movementController.SetMove(true);
+    // }
 
     void OnDamageDeal(int damageAmount)
     {
-        UpdateCanDealDamage(false);
+        // UpdateCanDealDamage(false);
     }
 
     void UpdateCanDealDamage(bool value)
@@ -97,12 +114,18 @@ public class MeleeController : MonoBehaviour
 
     void Attack()
     {
-        _damageController.DealDamage(_target);
-        UpdateCanDealDamage(false);
+        Debug.Log("ATTACK");
+        _damageController.DealDamage(_enemyController.GetCurrentTarget());
     }
 
     void ResetAttackCooldown()
     {
         _timeRemaining = _attackSpeed;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _meleeRange);
     }
 }

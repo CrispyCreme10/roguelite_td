@@ -33,6 +33,10 @@ public class MovementController : MonoBehaviour
                 _rb.velocity = new Vector2(dir.x * _moveSpeed, dir.y * _moveSpeed);
             }
         }
+        else
+        {
+            _rb.velocity = Vector2.zero;
+        }
     }
 
     public void SetMove(bool canMove)

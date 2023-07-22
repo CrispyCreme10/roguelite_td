@@ -1514,6 +1514,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7784349467163978324, guid: 4c9a6ddc2de7f4f41afc0c929298f779, type: 3}
   m_PrefabInstance: {fileID: 1589601465023754206}
   m_PrefabAsset: {fileID: 0}
+--- !u!58 &509517854 stripped
+CircleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 1685858999009842241, guid: 4c9a6ddc2de7f4f41afc0c929298f779, type: 3}
+  m_PrefabInstance: {fileID: 1589601465023754206}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -6168,12 +6173,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1405307315497111106, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: _moveSpeed
-      value: 4
+    - target: {fileID: 2662062975591128969, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+      propertyPath: _meleeRange
+      value: 2.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2417089146453719914, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: m_IsTrigger
+    - target: {fileID: 2662062975591128969, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+      propertyPath: _crystalCollider
+      value: 
+      objectReference: {fileID: 509517854}
+    - target: {fileID: 3456930543360964506, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+      propertyPath: _damageDealer
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3466492127235533783, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
@@ -6240,10 +6249,6 @@ PrefabInstance:
       propertyPath: _targetSurvivor
       value: 
       objectReference: {fileID: 283164117}
-    - target: {fileID: 7682528544142543789, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: ChanceToTargetPlayer
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
