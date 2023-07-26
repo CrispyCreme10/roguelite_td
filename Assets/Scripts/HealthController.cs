@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Sirenix.OdinInspector;
 
 public class HealthController : MonoBehaviour
 {
-    public Action<int, float> OnHealthChange;
+    public Action<int, float> OnHealthChange; // current health, % of total health
     public Action OnDeath;
 
     [SerializeField] private DamageController DamageController;
     [SerializeField] private int StartingHealth;
 
+    [ReadOnly]
+    [SerializeField]
     int _health;
 
     void Awake()

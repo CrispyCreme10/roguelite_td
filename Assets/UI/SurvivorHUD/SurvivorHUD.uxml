@@ -5,7 +5,7 @@
         <ui:VisualElement name="Bottom" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; height: 20%;">
             <ui:VisualElement name="Healthbar" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 50px; width: auto; flex-direction: column; max-width: 500px; justify-content: flex-start; align-self: flex-end; margin-left: 25px; margin-bottom: 25px;">
                 <ui:VisualElement name="HealthbarBg" style="flex-grow: 1; background-color: rgb(0, 0, 0); width: 100%;">
-                    <ui:VisualElement name="HealthbarFill" style="flex-grow: 1; background-color: rgb(255, 0, 0); width: 85%;" />
+                    <ui:VisualElement name="HealthbarFill" style="flex-grow: 1; background-color: rgb(255, 0, 0); width: 100%;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

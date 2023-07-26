@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,13 +26,16 @@ public class ProjectileController : MonoBehaviour
         transform.Translate(Time.deltaTime * _moveSpeed * _moveDirection);
     }
 
-    void OnTriggerEnter2D(Collider2D other) 
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (_DamageController != null)
         {
-            _DamageController.DealDamage(other);
-        }        
+            _DamageController.DealDamage(collision.collider);
+        }     
+    }
 
+    void OnTriggerEnter2D(Collider2D other) 
+    {
         if (other.CompareTag("Boundary"))
         {
             Destroy(gameObject);

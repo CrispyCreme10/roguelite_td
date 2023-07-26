@@ -1056,6 +1056,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8244913320127965700, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
   m_PrefabInstance: {fileID: 6117865456270743607}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &283164123 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2181370917248939466, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
+  m_PrefabInstance: {fileID: 6117865456270743607}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283164117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49a265359e9176fca883e543c681609c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &293167622
 GameObject:
   m_ObjectHideFlags: 0
@@ -2419,6 +2430,68 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &861973102
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 861973104}
+  - component: {fileID: 861973103}
+  - component: {fileID: 861973105}
+  m_Layer: 5
+  m_Name: HUD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &861973103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861973102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 0cbb75542ea3e1a4aa4b8f4700241826, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 1d25953621dfa3a99b3ba921b1f00dba, type: 3}
+  m_SortingOrder: 0
+--- !u!4 &861973104
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861973102}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &861973105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861973102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 816aaac6710effd428433c6ca125ec07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  survivorHealthController: {fileID: 283164123}
 --- !u!1 &898208138
 GameObject:
   m_ObjectHideFlags: 0
@@ -6117,10 +6190,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1685858999009842241, guid: 4c9a6ddc2de7f4f41afc0c929298f779, type: 3}
-      propertyPath: m_Radius
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4695185996083648210, guid: 4c9a6ddc2de7f4f41afc0c929298f779, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -6169,8 +6238,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crystal
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4185189192562358830, guid: 4c9a6ddc2de7f4f41afc0c929298f779, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6183,10 +6251,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1405307315497111106, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: _rb
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 2662062975591128969, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: _crystalCollider
       value: 
@@ -6243,30 +6307,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NormalEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 4306709888161138098, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4526071268711371150, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: m_BodyType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4526071268711371150, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5904132123886823286, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7259704263113262468, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7259704263113262468, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7682528544142543789, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: _crystal
       value: 
@@ -6275,10 +6315,6 @@ PrefabInstance:
       propertyPath: _targetSurvivor
       value: 
       objectReference: {fileID: 283164117}
-    - target: {fileID: 7682528544142543789, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: ChanceToTargetPlayer
-      value: 100
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6293,17 +6329,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1424578885233265681, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
-      propertyPath: moveSpeed
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 1424578885233265681, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: sceneCamera
       value: 
       objectReference: {fileID: 519420031}
-    - target: {fileID: 6827442861981615404, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
-      propertyPath: m_GravityScale
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -6365,6 +6393,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 346442681271263845, guid: 36f225d66bb11484297641f04d3b7a71, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 346442681271263845, guid: 36f225d66bb11484297641f04d3b7a71, type: 3}
     - target: {fileID: 4289981083533144499, guid: 36f225d66bb11484297641f04d3b7a71, type: 3}
       propertyPath: m_RootOrder
       value: 5
