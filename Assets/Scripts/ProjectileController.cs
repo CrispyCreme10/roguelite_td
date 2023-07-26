@@ -22,7 +22,7 @@ public class ProjectileController : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(_moveDirection * _moveSpeed * Time.deltaTime);
+        transform.Translate(Time.deltaTime * _moveSpeed * _moveDirection);
     }
 
     void OnTriggerEnter2D(Collider2D other) 

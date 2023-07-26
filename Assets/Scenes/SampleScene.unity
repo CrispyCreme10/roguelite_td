@@ -6245,7 +6245,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4306709888161138098, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4526071268711371150, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: m_BodyType
@@ -6255,13 +6255,17 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 5904132123886823286, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7259704263113262468, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7259704263113262468, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7682528544142543789, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: _crystal
@@ -6275,8 +6279,7 @@ PrefabInstance:
       propertyPath: ChanceToTargetPlayer
       value: 100
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4526071268711371150, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6290,9 +6293,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1424578885233265681, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
+      propertyPath: moveSpeed
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1424578885233265681, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: sceneCamera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 6827442861981615404, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -6340,14 +6351,6 @@ PrefabInstance:
     - target: {fileID: 8244913320127965700, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_Name
       value: Wizard
-      objectReference: {fileID: 0}
-    - target: {fileID: 9050578046046768458, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9050578046046768458, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

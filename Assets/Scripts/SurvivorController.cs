@@ -40,13 +40,13 @@ public class SurvivorController : MonoBehaviour
         var moveX = Input.GetAxisRaw("Horizontal");
         var moveY = Input.GetAxisRaw("Vertical");
 
-        _moveDirection = new Vector2(moveX, moveY).normalized;
+        _moveDirection = new Vector2(moveX, moveY);
         _mousePosition = sceneCamera.ScreenToWorldPoint(Input.mousePosition);
     }
 
     void Move()
     {
-        rb.velocity = new Vector2(_moveDirection.y * moveSpeed, _moveDirection.y * moveSpeed);
+        rb.velocity = Time.fixedDeltaTime * moveSpeed * new Vector2(_moveDirection.x, _moveDirection.y);
         
         // rotate player to follow mouse
         Vector2 aimDir = _mousePosition - rb.position;

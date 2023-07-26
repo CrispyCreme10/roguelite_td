@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Root" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement name="Top" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 15%;" />
+        <ui:VisualElement name="Middle" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 65%;" />
+        <ui:VisualElement name="Bottom" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; height: 20%;">
+            <ui:VisualElement name="Healthbar" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 50px; width: auto; flex-direction: column; max-width: 500px; justify-content: flex-start; align-self: flex-end; margin-left: 25px; margin-bottom: 25px;">
+                <ui:VisualElement name="HealthbarBg" style="flex-grow: 1; background-color: rgb(0, 0, 0); width: 100%;">
+                    <ui:VisualElement name="HealthbarFill" style="flex-grow: 1; background-color: rgb(255, 0, 0); width: 85%;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
