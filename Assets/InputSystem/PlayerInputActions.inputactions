@@ -42,6 +42,24 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Place Turret",
+                    "type": "Button",
+                    "id": "886c2b6c-ae03-431e-a40f-aecb21322dde",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Deselect Turret",
+                    "type": "Button",
+                    "id": "ef507269-7891-4e12-a996-914db1e71636",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Select Turret 1",
                     "type": "Button",
                     "id": "d4a804d9-46b5-4d22-a8ee-072ebb494678",
@@ -165,7 +183,7 @@
                 {
                     "name": "",
                     "id": "3be949a1-29c0-4ed0-9792-b6344d96d094",
-                    "path": "",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -192,6 +210,39 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Secondary Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6245a419-754f-4afe-abc0-e2e0b5e3027e",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Secondary Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "908eb359-15fa-4854-8034-65ce50e9b30e",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Place Turret",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "00b29d51-2807-4b25-9465-61801867bfea",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Deselect Turret",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

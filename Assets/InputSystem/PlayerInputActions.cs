@@ -64,6 +64,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Place Turret"",
+                    ""type"": ""Button"",
+                    ""id"": ""886c2b6c-ae03-431e-a40f-aecb21322dde"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Deselect Turret"",
+                    ""type"": ""Button"",
+                    ""id"": ""ef507269-7891-4e12-a996-914db1e71636"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Select Turret 1"",
                     ""type"": ""Button"",
                     ""id"": ""d4a804d9-46b5-4d22-a8ee-072ebb494678"",
@@ -187,7 +205,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""3be949a1-29c0-4ed0-9792-b6344d96d094"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -214,6 +232,39 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Secondary Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6245a419-754f-4afe-abc0-e2e0b5e3027e"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Secondary Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""908eb359-15fa-4854-8034-65ce50e9b30e"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Place Turret"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""00b29d51-2807-4b25-9465-61801867bfea"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Deselect Turret"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -256,6 +307,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_PrimaryFire = m_Player.FindAction("Primary Fire", throwIfNotFound: true);
         m_Player_SecondaryFire = m_Player.FindAction("Secondary Fire", throwIfNotFound: true);
+        m_Player_PlaceTurret = m_Player.FindAction("Place Turret", throwIfNotFound: true);
+        m_Player_DeselectTurret = m_Player.FindAction("Deselect Turret", throwIfNotFound: true);
         m_Player_SelectTurret1 = m_Player.FindAction("Select Turret 1", throwIfNotFound: true);
     }
 
@@ -322,6 +375,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_PrimaryFire;
     private readonly InputAction m_Player_SecondaryFire;
+    private readonly InputAction m_Player_PlaceTurret;
+    private readonly InputAction m_Player_DeselectTurret;
     private readonly InputAction m_Player_SelectTurret1;
     public struct PlayerActions
     {
@@ -331,6 +386,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @PrimaryFire => m_Wrapper.m_Player_PrimaryFire;
         public InputAction @SecondaryFire => m_Wrapper.m_Player_SecondaryFire;
+        public InputAction @PlaceTurret => m_Wrapper.m_Player_PlaceTurret;
+        public InputAction @DeselectTurret => m_Wrapper.m_Player_DeselectTurret;
         public InputAction @SelectTurret1 => m_Wrapper.m_Player_SelectTurret1;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -353,6 +410,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @SecondaryFire.started += instance.OnSecondaryFire;
             @SecondaryFire.performed += instance.OnSecondaryFire;
             @SecondaryFire.canceled += instance.OnSecondaryFire;
+            @PlaceTurret.started += instance.OnPlaceTurret;
+            @PlaceTurret.performed += instance.OnPlaceTurret;
+            @PlaceTurret.canceled += instance.OnPlaceTurret;
+            @DeselectTurret.started += instance.OnDeselectTurret;
+            @DeselectTurret.performed += instance.OnDeselectTurret;
+            @DeselectTurret.canceled += instance.OnDeselectTurret;
             @SelectTurret1.started += instance.OnSelectTurret1;
             @SelectTurret1.performed += instance.OnSelectTurret1;
             @SelectTurret1.canceled += instance.OnSelectTurret1;
@@ -372,6 +435,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @SecondaryFire.started -= instance.OnSecondaryFire;
             @SecondaryFire.performed -= instance.OnSecondaryFire;
             @SecondaryFire.canceled -= instance.OnSecondaryFire;
+            @PlaceTurret.started -= instance.OnPlaceTurret;
+            @PlaceTurret.performed -= instance.OnPlaceTurret;
+            @PlaceTurret.canceled -= instance.OnPlaceTurret;
+            @DeselectTurret.started -= instance.OnDeselectTurret;
+            @DeselectTurret.performed -= instance.OnDeselectTurret;
+            @DeselectTurret.canceled -= instance.OnDeselectTurret;
             @SelectTurret1.started -= instance.OnSelectTurret1;
             @SelectTurret1.performed -= instance.OnSelectTurret1;
             @SelectTurret1.canceled -= instance.OnSelectTurret1;
@@ -416,6 +485,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnPrimaryFire(InputAction.CallbackContext context);
         void OnSecondaryFire(InputAction.CallbackContext context);
+        void OnPlaceTurret(InputAction.CallbackContext context);
+        void OnDeselectTurret(InputAction.CallbackContext context);
         void OnSelectTurret1(InputAction.CallbackContext context);
     }
 }
