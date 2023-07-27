@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SurvivorController : MonoBehaviour
 {
+    private Action<Vector2> OnSurvivorMove;
+    
     [Header("Refs")]
     [SerializeField] private Camera sceneCamera;
     [SerializeField] private Rigidbody2D rb;
@@ -53,7 +56,9 @@ public class SurvivorController : MonoBehaviour
     private void Move()
     {
         Vector2 moveDir = _playerInputActions.Player.Move.ReadValue<Vector2>();
-        rb.velocity = Time.fixedDeltaTime * moveSpeed * new Vector2(moveDir.x, moveDir.y);
+        Vector2 velocity = Time.fixedDeltaTime * moveSpeed * new Vector2(moveDir.x, moveDir.y);
+        rb.velocity = velocity;
+        OnSurvivorMove?.Invoke(velocity);
     }
 
     private void Look()
@@ -69,9 +74,9 @@ public class SurvivorController : MonoBehaviour
         {
             aimDir = _playerInputActions.Player.Look.ReadValue<Vector2>();
         }
-        
+
         var aimAngle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg - 90f;
-        rb.rotation = aimAngle;
+        rb.rotation = aimAngle + 180f;
     }
 
     private void PrimaryFire(InputAction.CallbackContext context)
@@ -98,6 +103,7 @@ public class SurvivorController : MonoBehaviour
         if (_selectedTower == null) return;
         
         _selectedTower.SetPlaced();
+        OnSurvivorMove -= _selectedTower.OnSurvivorMove;
         _selectedTower = null;
     }
     
@@ -112,9 +118,9 @@ public class SurvivorController : MonoBehaviour
     private void SelectTurret1(InputAction.CallbackContext context)
     {
         if (_selectedTower != null) return;
-        
-        _selectedTower = Instantiate(tower1, tower1.transform.position, Quaternion.identity, towerSpawnPoint);
-        _selectedTower.transform.position = Vector3.zero;
-        _selectedTower.SetSelected(playerTowersContainer);
+
+        _selectedTower = Instantiate(tower1, tower1.transform.position, Quaternion.identity, playerTowersContainer);
+        _selectedTower.SetSelected(playerTowersContainer, towerSpawnPoint);
+        OnSurvivorMove += _selectedTower.OnSurvivorMove;
     }
 }

@@ -4875,11 +4875,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!4 &1683124292 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5036963029606529265, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
-  m_PrefabInstance: {fileID: 6117865456270743607}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1741529382
 GameObject:
   m_ObjectHideFlags: 0
@@ -6365,17 +6360,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1424578885233265681, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
-      propertyPath: tower1
-      value: 
-      objectReference: {fileID: 8747732867528054754, guid: 36f225d66bb11484297641f04d3b7a71, type: 3}
-    - target: {fileID: 1424578885233265681, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: sceneCamera
       value: 
       objectReference: {fileID: 519420031}
     - target: {fileID: 1424578885233265681, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
-      propertyPath: towerSpawnPoint
+      propertyPath: playerTowersContainer
       value: 
-      objectReference: {fileID: 1683124292}
+      objectReference: {fileID: 1511707212}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -6394,7 +6385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_LocalRotation.x
@@ -6406,7 +6397,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6418,7 +6409,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7414879583095080160, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8244913320127965700, guid: 6c368b10853e289009b99dac1e5cd590, type: 3}
       propertyPath: m_Name

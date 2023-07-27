@@ -9,11 +9,21 @@ public class TowerController : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private GameObject healthbarCanvas;
     [SerializeField] private SpriteRenderer cannonRenderer;
+    [SerializeField] private Rigidbody2D rb;
 
     private bool _isSelected;
     private Transform _playerTowersContainer;
-    
-    public void SetSelected(Transform playerTowersContainer)
+    private Transform _towerSpawnPoint;
+
+    private void Update()
+    {
+        if (_isSelected)
+        {
+            transform.position = _towerSpawnPoint.position;
+        }
+    }
+
+    public void SetSelected(Transform playerTowersContainer, Transform towerSpawnPoint)
     {
         var color1 = spriteRenderer.color;
         color1.a = 0.3f;
@@ -24,6 +34,7 @@ public class TowerController : MonoBehaviour
         cannonRenderer.color = color2;
         _isSelected = true;
         _playerTowersContainer = playerTowersContainer;
+        _towerSpawnPoint = towerSpawnPoint;
     }
 
     public void SetPlaced()
@@ -37,13 +48,11 @@ public class TowerController : MonoBehaviour
         healthbarCanvas.SetActive(true);
         cannonRenderer.color = color2;
         _isSelected = false;
-        
-        // set parent to scene
-        transform.SetParent(_playerTowersContainer);
+        rb.velocity = Vector2.zero;
     }
 
-    private void Update()
+    public void OnSurvivorMove(Vector2 velocity)
     {
-        
+        rb.velocity = velocity;
     }
 }
