@@ -520,11 +520,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8c73fb6a8c6a1ef9109e90489f883e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damageDealer: 0
-  _damageReceiver: 1
-  _damageAmount: 0
-  _damageTag: 0
-  _receivedDamageTagsIgnored: 00000000
+  damageDealer: 0
+  damageReceiver: 1
+  damageAmount: 0
+  damageTag: 0
+  receivedDamageTagsIgnored: 00000000
 --- !u!114 &1975410395063628811
 MonoBehaviour:
   m_ObjectHideFlags: 0
