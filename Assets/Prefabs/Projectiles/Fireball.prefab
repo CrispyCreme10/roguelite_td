@@ -62,11 +62,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8c73fb6a8c6a1ef9109e90489f883e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damageDealer: 1
-  _damageReceiver: 0
-  _damageAmount: 15
-  _damageTag: 0
-  _receivedDamageTagsIgnored: 
+  damageDealer: 1
+  damageReceiver: 0
+  damageAmount: 10
+  damageTag: 0
+  receivedDamageTagsIgnored: 
 --- !u!212 &1122171785551980692
 SpriteRenderer:
   m_ObjectHideFlags: 0

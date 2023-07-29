@@ -6282,10 +6282,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1405307315497111106, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2662062975591128969, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: _crystalCollider
       value: 
@@ -6341,10 +6337,6 @@ PrefabInstance:
     - target: {fileID: 4306709888161138098, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: m_Name
       value: NormalEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 4306709888161138098, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7259704263113262468, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: m_AnchorMax.x

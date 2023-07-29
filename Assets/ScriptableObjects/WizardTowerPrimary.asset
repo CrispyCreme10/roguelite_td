@@ -15,5 +15,5 @@ MonoBehaviour:
   name: Wizard Tower Primary
   description: 
   cooldown: 1.5
-  damage: 50
-  prefab: {fileID: -8095975489088626351, guid: 8db975cc964af7e29a33edfeb8e42fc0, type: 3}
+  damage: 15
+  prefab: {fileID: 2475930950198765999, guid: 099e7232ce61e8009878096a43e4beb0, type: 3}

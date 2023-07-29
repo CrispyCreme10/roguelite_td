@@ -325,7 +325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectiles:
   - slot: 0
-    data: {fileID: 11400000, guid: b659d213650dea3488b05db514de132b, type: 2}
+    data: {fileID: 11400000, guid: eaca6d44f4b836f489cfde743c839ab7, type: 2}
   spawnPos: {fileID: 6655120652858250480}
   cooldowns: []
 --- !u!212 &7930916591714323724

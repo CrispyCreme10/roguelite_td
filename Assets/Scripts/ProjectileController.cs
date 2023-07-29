@@ -28,6 +28,7 @@ public class ProjectileController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("ON COLLISION: " + collision.gameObject.name);
         if (_DamageController != null)
         {
             _DamageController.DealDamage(collision.collider);
@@ -36,6 +37,7 @@ public class ProjectileController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) 
     {
+        Debug.Log("ON TRIGGER: " + other.gameObject.name);
         if (other.CompareTag("Boundary"))
         {
             Destroy(gameObject);
