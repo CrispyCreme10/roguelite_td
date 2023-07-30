@@ -1,0 +1,108 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/PlayerInventory.uss?fileID=7433441132597879392&amp;guid=405655de3c35c7246a1eedd3d7535251&amp;type=3#PlayerInventory" />
+    <ui:VisualElement name="Root" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement name="TopNav" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 10%;" />
+        <ui:VisualElement name="Panels" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 90%; flex-direction: row;">
+            <ui:VisualElement name="LeftPanel" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); min-width: 33%; max-width: 33%;">
+                <ui:VisualElement name="CharacterLoadout" class="bg-container">
+                    <ui:VisualElement name="CharacterView" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 50%;" />
+                    <ui:VisualElement name="EquipmentModifierSlots" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; height: 50%; padding-left: 25px; padding-right: 25px; padding-top: 25px; padding-bottom: 25px; justify-content: space-between; align-items: center; flex-wrap: wrap; align-self: flex-end;">
+                        <ui:VisualElement name="EquipmentSlot1">
+                            <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                <ui:Label tabindex="-1" text="E1" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="EquipmentSlot2">
+                            <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                <ui:Label tabindex="-1" text="E2" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="EquipmentSlot3">
+                            <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                <ui:Label tabindex="-1" text="E3" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="ModifierSlot1">
+                            <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                <ui:Label tabindex="-1" text="M1" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="ModifierSlot2">
+                            <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                <ui:Label tabindex="-1" text="M2" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="ModifierSlot3">
+                            <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                <ui:Label tabindex="-1" text="M3" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="MiddlePanel" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); min-width: 33%; max-width: 33%;">
+                <ui:VisualElement name="Loadout" class="bg-container" style="padding-left: 25px; padding-right: 25px; padding-top: 25px; padding-bottom: 25px;">
+                    <ui:VisualElement name="TowerUtilitySlots" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: 45%; align-self: auto; align-items: auto; flex-wrap: nowrap; flex-basis: auto; margin-bottom: 25px;">
+                        <ui:VisualElement name="TowerSlots" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; flex-wrap: wrap; flex-shrink: 1; align-items: flex-start; justify-content: flex-start; align-self: flex-start;">
+                            <ui:VisualElement name="TowerSlot1">
+                                <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                    <ui:Label tabindex="-1" text="T1" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="TowerSlot2">
+                                <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                    <ui:Label tabindex="-1" text="T2" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="TowerSlot3">
+                                <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                    <ui:Label tabindex="-1" text="T3" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="TowerSlot4">
+                                <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                    <ui:Label tabindex="-1" text="T4" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="UtilitySlots" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; flex-shrink: 0; align-self: flex-start;">
+                            <ui:VisualElement name="UtilitySlot1">
+                                <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                    <ui:Label tabindex="-1" text="U1" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="UtilitySlot2">
+                                <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                    <ui:Label tabindex="-1" text="U2" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backpack" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 35%; flex-direction: row; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-bottom: 25px;">
+                        <ui:VisualElement name="BackpackSlot" style="margin-right: 25px;">
+                            <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                <ui:Label tabindex="-1" text="B" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="BackpackSlots" class="inventory-grid" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Pouch" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 20%; flex-direction: row;">
+                        <ui:VisualElement name="PouchSlot" style="margin-right: 25px;">
+                            <ui:VisualElement name="LoadoutSlot" class="loadout-slot">
+                                <ui:Label tabindex="-1" text="P" display-tooltip-when-elided="true" class="loadout-debug-text" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="PouchSlots" class="inventory-grid" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="RightPanel" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); min-width: 34%; max-width: 34%;">
+                <ui:VisualElement name="Inventory" class="bg-container">
+                    <ui:VisualElement name="InventoryStats" style="flex-grow: 1; background-color: rgb(0, 0, 0); height: 5%;" />
+                    <ui:VisualElement name="InventoryFilters" style="flex-grow: 1; background-color: rgb(36, 36, 36); height: 5%;" />
+                    <ui:ScrollView name="InventorySlots" vertical-scroller-visibility="AlwaysVisible" style="height: 806px; flex-direction: row; flex-wrap: wrap;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Projectile")]
 public class ProjectileSO : ScriptableObject
 {
     [SerializeField] private new string name;

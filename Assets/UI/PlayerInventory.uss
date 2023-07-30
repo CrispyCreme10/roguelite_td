@@ -1,0 +1,79 @@
+.bg-container {
+    flex-grow: 1;
+    background-color: rgba(24, 24, 24, 0.9);
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.middle-flex-pad {
+    margin-left: 28px;
+    margin-right: 28px;
+}
+
+.loadout-slot {
+    flex-grow: 1;
+    background-color: rgb(49, 49, 49);
+    width: 165px;
+    height: 165px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    min-width: auto;
+    max-width: 165px;
+    max-height: 165px;
+    min-height: auto;
+}
+
+.loadout-debug-text {
+    color: rgb(255, 255, 255);
+    font-size: 50px;
+    align-self: auto;
+    -unity-text-align: middle-center;
+    width: 100%;
+    height: 100%;
+}
+
+.inventory-grid {
+    border-left-color: rgba(255, 255, 255, 0);
+    border-right-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-bottom-color: rgba(255, 255, 255, 0);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.inventory-slot-border {
+    border-left-color: rgb(75, 75, 75);
+    border-right-color: rgb(75, 75, 75);
+    border-top-color: rgb(75, 75, 75);
+    border-bottom-color: rgb(75, 75, 75);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.label-unset {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
