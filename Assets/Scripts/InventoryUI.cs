@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -28,10 +29,23 @@ public class InventoryUI : MonoBehaviour
     private VisualElement _pouchLoadoutSlots;
     private ScrollView _playerInventorySlots;
     
+    // drag drop
+    private bool IsDragging => _dragInventoryItem != null;
+    private bool ActiveDropzone => _dropzoneElement != null;
+    private InventoryItem _dragInventoryItem;
+    private Image _dragImage;
+    private DropzoneElement _dropzoneElement;
+    
     private void Awake()
     {
         _root = GetComponent<UIDocument>().rootVisualElement;
+        _root.RegisterCallback<MouseMoveEvent>(RootMouseMove);
         _playerInventorySlots = _root.Q<ScrollView>("InventorySlots");
+        
+        // setup dropzones
+        _equipmentLoadoutSlot1 = _root.Q<VisualElement>("EquipmentSlot1");
+        var equipment1Dropzone = new DropzoneElement(ItemType.Equipment, _equipmentLoadoutSlot1);
+        // equipment1Dropzone.Element.RegisterCallback();
     }
 
     private void Start()
@@ -66,6 +80,10 @@ public class InventoryUI : MonoBehaviour
                         width = new Length(50, LengthUnit.Percent)
                     }
                 };
+                
+                image.RegisterCallback<MouseDownEvent, InventoryItem>(ImageMouseDown, inventoryItem);
+                image.RegisterCallback<MouseUpEvent>(ImageMouseUp);
+                
                 slot.Add(image);
 
                 if (inventoryItem.Amount > 1)
@@ -116,5 +134,48 @@ public class InventoryUI : MonoBehaviour
         newSlot.AddToClassList("inventory-slot-border");
         
         return newSlot;
+    }
+
+    private void ImageMouseDown(MouseDownEvent evt, InventoryItem inventoryItem)
+    {
+        _dragInventoryItem = inventoryItem;
+        _dragImage = new Image
+        {
+            sprite = inventoryItem.Item.Icon
+        };
+    }
+
+    private void RootMouseMove(MouseMoveEvent evt)
+    {
+        if (!IsDragging) return;
+        
+        // put drag inventory item's image under the cursor with lowered opacity
+        
+    }
+
+    private void ImageMouseUp(MouseUpEvent evt)
+    {
+        // if mouse is over a dropzone
+        // then send item info to dropzone & remove item from inventory
+
+    }
+
+    private class DropzoneElement
+    {
+        public ItemType AcceptedItemType { get; }
+        public VisualElement Element { get; }
+        
+        public DropzoneElement(ItemType acceptedItemType, VisualElement element)
+        {
+            AcceptedItemType = acceptedItemType;
+            Element = element;
+            
+            element.RegisterCallback<MouseEnterEvent>(ElementMouseEnter);
+        }
+
+        private void ElementMouseEnter(MouseEnterEvent evt)
+        {
+            
+        }
     }
 }
