@@ -45,7 +45,8 @@ public class InventoryUI : MonoBehaviour
         // setup dropzones
         _equipmentLoadoutSlot1 = _root.Q<VisualElement>("EquipmentSlot1");
         var equipment1Dropzone = new DropzoneElement(ItemType.Equipment, _equipmentLoadoutSlot1);
-        // equipment1Dropzone.Element.RegisterCallback();
+        equipment1Dropzone.Element.RegisterCallback<MouseEnterEvent, DropzoneElement>(ElementMouseEnter, equipment1Dropzone);
+        equipment1Dropzone.Element.RegisterCallback<MouseLeaveEvent, DropzoneElement>(ElementMouseLeave, equipment1Dropzone);
     }
 
     private void Start()
@@ -160,22 +161,50 @@ public class InventoryUI : MonoBehaviour
 
     }
 
+    private void ElementMouseEnter(MouseEnterEvent evt, DropzoneElement dropzone)
+    {
+        if (!IsDragging) return;
+
+        _dropzoneElement = dropzone;
+        dropzone.HighlightDropzone(_dragInventoryItem.Item.ItemType);
+    }
+    
+    private void ElementMouseLeave(MouseLeaveEvent evt, DropzoneElement dropzone)
+    {
+        // cleanup from any other drag/drop event
+        _dropzoneElement.ResetDropzoneColor();
+        _dropzoneElement = null;
+    }
+
     private class DropzoneElement
     {
         public ItemType AcceptedItemType { get; }
         public VisualElement Element { get; }
-        
+
+        private StyleColor _defaultBgColor;
+        private readonly VisualElement _loadoutElement;
+
         public DropzoneElement(ItemType acceptedItemType, VisualElement element)
         {
             AcceptedItemType = acceptedItemType;
             Element = element;
             
-            element.RegisterCallback<MouseEnterEvent>(ElementMouseEnter);
+            _loadoutElement = Element.Q<VisualElement>("Loadout");
+            _defaultBgColor = _loadoutElement.style.backgroundColor;
         }
 
-        private void ElementMouseEnter(MouseEnterEvent evt)
+        public void HighlightDropzone(ItemType itemType)
         {
-            
+            Color green = Color.green;
+            green.a = 15f;
+            Color red = Color.red;
+            red.a = 15f;
+            _loadoutElement.style.backgroundColor = itemType == AcceptedItemType ? green : red;
+        }
+
+        public void ResetDropzoneColor()
+        {
+            _loadoutElement.style.backgroundColor = _defaultBgColor;
         }
     }
 }
