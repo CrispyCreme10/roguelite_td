@@ -27,5 +27,8 @@ public enum ItemType
     Consumable,
     Equipment,
     Modifier,
-    Utility
+    Utility,
+    Tower,
+    Backpack,
+    Pouch
 }
