@@ -67,22 +67,35 @@ public class InventorySO : ScriptableObject {
         return true;
     }
 
-    public bool TryAddItemAtIndex(StackItem stackItem, int targetIndex, int sourceIndex) {
-        if (IsFull || stackItem.Amount == 0 || targetIndex < size || targetIndex >= size || sourceIndex < size || sourceIndex >= size) return false;
-        if (items[targetIndex].IsEmpty) {
-            items[targetIndex] = stackItem;
-            return true;
+    public int TryAddItemAtIndex(StackItem stackItem, int targetIndex) {
+        if (stackItem.Amount == 0 || targetIndex < 0 || targetIndex >= items.Count) return -1;
+
+        var stackItemAtIndex = items[targetIndex];
+        if (stackItemAtIndex != null) {
+            // return if mismatch types
+            if (stackItemAtIndex.Item.name != stackItem.Item.name) return -1;
+            
+            // potential merge
+            var mergeTotal = stackItem.Amount + stackItemAtIndex.Amount;
+            var overflow = mergeTotal - stackItemAtIndex.Item.StackSize;
+            if (overflow > 0) {
+                items[targetIndex].IncreaseAmount(stackItem.Amount - overflow);
+                return overflow;
+            }
+
+            items[targetIndex].IncreaseAmount(stackItem.Amount);
+            return 0;
         }
 
-        
-        return true;
+        items[targetIndex] = stackItem;
+        return 0;
     }
 
-    public bool TryRemoveItem(int index, int amount) {
+    public bool TryRemoveItem(int index, int decreaseAmount) {
         if (index >= items.Count) return false;
 
         var item = items[index];
-        if (item.DecreaseAmount(amount) == 0) {
+        if (item.DecreaseAmount(decreaseAmount) == 0) {
             items.RemoveAt(index);
         }
 
@@ -117,7 +130,7 @@ public class StackItem {
     public int Amount => amount;
     public ItemSO Item => item;
     public bool IsEmpty => amount == 0;
-    public bool IsMaxed => amount == item.StackSize;
+    public bool IsMaxed => item != null && amount == item.StackSize;
 
     public StackItem() {
         item = null;

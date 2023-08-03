@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 public class InventoryUI : MonoBehaviour {
@@ -48,41 +47,48 @@ public class InventoryUI : MonoBehaviour {
             _equipmentLoadoutSlot1,
             new[] { ItemType.Equipment },
             newStackItem => {
+                // attempt to add equipment to slot
+                Debug.Log("Equipment 1 TARGET");
                 var addedEquipmentToLoadout = playerPermDataSo.Loadout.TryAddEquipment(newStackItem, 0);
                 return new TargetDropdownResult(addedEquipmentToLoadout, 0);
             },
-            targetDropdownResult => { }));
-        _equipmentLoadoutSlot2 = _root.Q<VisualElement>("EquipmentSlot2");
-        _dropzoneElements.Add(new DropzoneElement(_equipmentLoadoutSlot2, StackItemContainerType.Equipment, 1));
-        _equipmentLoadoutSlot3 = _root.Q<VisualElement>("EquipmentSlot3");
-        _dropzoneElements.Add(new DropzoneElement(_equipmentLoadoutSlot3, StackItemContainerType.Equipment, 2));
-        // modifiers
-        _modifierLoadoutSlot1 = _root.Q<VisualElement>("ModifierSlot1");
-        _dropzoneElements.Add(new DropzoneElement(_modifierLoadoutSlot1, StackItemContainerType.Modifier));
-        _modifierLoadoutSlot2 = _root.Q<VisualElement>("ModifierSlot2");
-        _dropzoneElements.Add(new DropzoneElement(_modifierLoadoutSlot2, StackItemContainerType.Modifier, 1));
-        _modifierLoadoutSlot3 = _root.Q<VisualElement>("ModifierSlot3");
-        _dropzoneElements.Add(new DropzoneElement(_modifierLoadoutSlot3, StackItemContainerType.Modifier, 2));
-        // towers
-        _towerLoadoutSlot1 = _root.Q<VisualElement>("TowerSlot1");
-        _dropzoneElements.Add(new DropzoneElement(_towerLoadoutSlot1, StackItemContainerType.Tower));
-        _towerLoadoutSlot2 = _root.Q<VisualElement>("TowerSlot2");
-        _dropzoneElements.Add(new DropzoneElement(_towerLoadoutSlot2, StackItemContainerType.Tower, 1));
-        _towerLoadoutSlot3 = _root.Q<VisualElement>("TowerSlot3");
-        _dropzoneElements.Add(new DropzoneElement(_towerLoadoutSlot3, StackItemContainerType.Tower, 2));
-        _towerLoadoutSlot4 = _root.Q<VisualElement>("TowerSlot4");
-        _dropzoneElements.Add(new DropzoneElement(_towerLoadoutSlot4, StackItemContainerType.Tower, 3));
-        // utility
-        _utilityLoadoutSlot1 = _root.Q<VisualElement>("UtilitySlot1");
-        _dropzoneElements.Add(new DropzoneElement(_utilityLoadoutSlot1, StackItemContainerType.Utility));
-        _utilityLoadoutSlot2 = _root.Q<VisualElement>("UtilitySlot2");
-        _dropzoneElements.Add(new DropzoneElement(_utilityLoadoutSlot2, StackItemContainerType.Utility, 1));
-        // backpack
-        _backpackLoadoutSlot = _root.Q<VisualElement>("BackpackSlot");
-        _dropzoneElements.Add(new DropzoneElement(_backpackLoadoutSlot, StackItemContainerType.Backpack));
-        // pouch
-        _pouchLoadoutSlot = _root.Q<VisualElement>("PouchSlot");
-        _dropzoneElements.Add(new DropzoneElement(_pouchLoadoutSlot, StackItemContainerType.Pouch));
+            (selfStackItem, targetDropdownResult) => {
+                if (targetDropdownResult.ItemAccepted) {
+                    // remove item from Equipment Slot 1
+                    playerPermDataSo.Loadout.TryRemoveEquipment(0);
+                }
+            }));
+        // _equipmentLoadoutSlot2 = _root.Q<VisualElement>("EquipmentSlot2");
+        // _dropzoneElements.Add(new DropzoneElement(_equipmentLoadoutSlot2, StackItemContainerType.Equipment, 1));
+        // _equipmentLoadoutSlot3 = _root.Q<VisualElement>("EquipmentSlot3");
+        // _dropzoneElements.Add(new DropzoneElement(_equipmentLoadoutSlot3, StackItemContainerType.Equipment, 2));
+        // // modifiers
+        // _modifierLoadoutSlot1 = _root.Q<VisualElement>("ModifierSlot1");
+        // _dropzoneElements.Add(new DropzoneElement(_modifierLoadoutSlot1, StackItemContainerType.Modifier));
+        // _modifierLoadoutSlot2 = _root.Q<VisualElement>("ModifierSlot2");
+        // _dropzoneElements.Add(new DropzoneElement(_modifierLoadoutSlot2, StackItemContainerType.Modifier, 1));
+        // _modifierLoadoutSlot3 = _root.Q<VisualElement>("ModifierSlot3");
+        // _dropzoneElements.Add(new DropzoneElement(_modifierLoadoutSlot3, StackItemContainerType.Modifier, 2));
+        // // towers
+        // _towerLoadoutSlot1 = _root.Q<VisualElement>("TowerSlot1");
+        // _dropzoneElements.Add(new DropzoneElement(_towerLoadoutSlot1, StackItemContainerType.Tower));
+        // _towerLoadoutSlot2 = _root.Q<VisualElement>("TowerSlot2");
+        // _dropzoneElements.Add(new DropzoneElement(_towerLoadoutSlot2, StackItemContainerType.Tower, 1));
+        // _towerLoadoutSlot3 = _root.Q<VisualElement>("TowerSlot3");
+        // _dropzoneElements.Add(new DropzoneElement(_towerLoadoutSlot3, StackItemContainerType.Tower, 2));
+        // _towerLoadoutSlot4 = _root.Q<VisualElement>("TowerSlot4");
+        // _dropzoneElements.Add(new DropzoneElement(_towerLoadoutSlot4, StackItemContainerType.Tower, 3));
+        // // utility
+        // _utilityLoadoutSlot1 = _root.Q<VisualElement>("UtilitySlot1");
+        // _dropzoneElements.Add(new DropzoneElement(_utilityLoadoutSlot1, StackItemContainerType.Utility));
+        // _utilityLoadoutSlot2 = _root.Q<VisualElement>("UtilitySlot2");
+        // _dropzoneElements.Add(new DropzoneElement(_utilityLoadoutSlot2, StackItemContainerType.Utility, 1));
+        // // backpack
+        // _backpackLoadoutSlot = _root.Q<VisualElement>("BackpackSlot");
+        // _dropzoneElements.Add(new DropzoneElement(_backpackLoadoutSlot, StackItemContainerType.Backpack));
+        // // pouch
+        // _pouchLoadoutSlot = _root.Q<VisualElement>("PouchSlot");
+        // _dropzoneElements.Add(new DropzoneElement(_pouchLoadoutSlot, StackItemContainerType.Pouch));
     }
 
     private void Start() {
@@ -98,27 +104,46 @@ public class InventoryUI : MonoBehaviour {
                 flexWrap = new StyleEnum<Wrap>(Wrap.Wrap)
             }
         };
-        for (int i = 0; i < playerPermDataSo.Inventory.Size; i++) {
+        for (var i = 0; i < playerPermDataSo.Inventory.Size; i++) {
             var slot = MakeInventorySlot(SlotSize);
-            DropzoneElement slotDropzone = null;
-            var inventoryItem = playerPermDataSo.Inventory.GetItemAtIndex(i);
-            if (!inventoryItem.IsEmpty) {
+            var inventoryStackItem = playerPermDataSo.Inventory.GetItemAtIndex(i);
+            var copyIndex = i;
+            var slotDropzone = new StackItemDropzone(
+                slot,
+                new[] {
+                    ItemType.Backpack, ItemType.Consumable, ItemType.Crafting, ItemType.Currency,
+                    ItemType.Equipment,
+                    ItemType.Modifier, ItemType.Pouch, ItemType.Tower, ItemType.Utility
+                },
+                newStackItem => {
+                    // safe to assume new stackItem is valid to be placed here?
+                    Debug.Log("Inventory Slot Target: " + newStackItem.Item.name);
+                    var remainingAmount = playerPermDataSo.Inventory.TryAddItemAtIndex(newStackItem, copyIndex);
+                    return new TargetDropdownResult(remainingAmount > -1, remainingAmount);
+                },
+                (selfStackItemAmount, targetDropdownResult) => {
+                    Debug.Log("Inventory Slot SOURCE: " + targetDropdownResult);
+                    if (!targetDropdownResult.ItemAccepted) return;
+                    playerPermDataSo.Inventory.TryRemoveItem(copyIndex,
+                        selfStackItemAmount - targetDropdownResult.RemainingAmount);
+                },
+                inventoryStackItem
+            );
+            StackItemDragDropHandler.RegisterDropzone(slotDropzone);
+            if (!inventoryStackItem.IsEmpty) {
                 var image = new Image {
-                    sprite = inventoryItem.Item.Icon,
+                    sprite = inventoryStackItem.Item.Icon,
                     style = {
                         height = new Length(50, LengthUnit.Percent),
                         width = new Length(50, LengthUnit.Percent)
                     }
                 };
 
-                var bundle = new DragDropEventBundle(inventoryItem, slot);
-                image.RegisterCallback<MouseDownEvent, DragDropEventBundle>(ImageMouseDown, bundle);
-
                 slot.Add(image);
 
-                if (inventoryItem.Amount > 1) {
+                if (inventoryStackItem.Amount > 1) {
                     var label = new Label {
-                        text = inventoryItem.Amount.ToString(),
+                        text = inventoryStackItem.Amount.ToString(),
                         style = {
                             color = Color.white,
                             fontSize = 20f,
@@ -132,13 +157,10 @@ public class InventoryUI : MonoBehaviour {
                     label.AddToClassList("label-unset");
                     slot.Add(label);
                 }
-
-                slotDropzone = new DropzoneElement(slot, StackItemContainerType.Inventory, i, inventoryItem);
+                
+                image.RegisterCallback<MouseDownEvent, StackItemDropzone>(ImageMouseDown, slotDropzone);
             }
-
-            // add inventory slot to dropzone elements
-            slotDropzone ??= new DropzoneElement(slot, StackItemContainerType.Inventory);
-            _dropzoneElements.Add(slotDropzone);
+            
             container.Add(slot);
         }
 
@@ -188,90 +210,83 @@ public class InventoryUI : MonoBehaviour {
         return newSlot;
     }
 
-    private void ImageMouseDown(MouseDownEvent evt, DragDropEventBundle bundle) {
-        _dragDropEventBundle = bundle;
+    private void ImageMouseDown(MouseDownEvent evt, StackItemDropzone dropzone) {
         var dragImage = new Image {
-            sprite = _dragDropEventBundle.StackItem.Item.Icon,
+            sprite = dropzone.StackItem.Item.Icon,
             style = {
                 height = 115f * 0.5f,
                 width = 115f * 0.5f
             }
         };
-        _dragElement = new VisualElement {
+        StackItemDragDropHandler.DragElement = new VisualElement {
             name = "DragElement",
             style = {
                 position = new StyleEnum<Position>(Position.Absolute),
                 opacity = 0f
             }
         };
-        _dragElement.Add(dragImage);
-        _root.Add(_dragElement);
+        
+        StackItemDragDropHandler.SetSourceDropzone(dropzone);
+        StackItemDragDropHandler.DragElement.Add(dragImage);
+        _root.Add(StackItemDragDropHandler.DragElement);
     }
 
     private void RootMouseMove(MouseMoveEvent evt) {
-        if (!IsDragging) return;
+        if (!StackItemDragDropHandler.IsDragging) return;
 
         // lower opacity of item in inventory that is being drug
-        _dragDropEventBundle.SourceVisualElement.style.opacity = 0.1f;
+        StackItemDragDropHandler.ApplySourceDragStyling();
 
         // put drag inventory item's image under the cursor with lowered opacity
         var mousePos = Input.mousePosition;
         var mousePosAdj = new Vector2(mousePos.x, Screen.height - mousePos.y);
         mousePosAdj = RuntimePanelUtils.ScreenToPanel(_root.panel, mousePosAdj);
 
-        _dragElement.style.top = mousePosAdj.y - _dragElement.worldBound.height / 2;
-        _dragElement.style.left = mousePosAdj.x - _dragElement.worldBound.width / 2;
-        _dragElement.style.opacity = 0.1f;
-        _dragElement.pickingMode = PickingMode.Ignore;
+        StackItemDragDropHandler.DragElement.style.top =
+            mousePosAdj.y - StackItemDragDropHandler.DragElement.worldBound.height / 2;
+        StackItemDragDropHandler.DragElement.style.left =
+            mousePosAdj.x - StackItemDragDropHandler.DragElement.worldBound.width / 2;
+        StackItemDragDropHandler.DragElement.style.opacity = 0.1f;
+        StackItemDragDropHandler.DragElement.pickingMode = PickingMode.Ignore;
 
         // check dropzone overlaps
-        var overlappedDropzones = _dropzoneElements.Where(dropzoneElement =>
-            dropzoneElement.Element.worldBound.Overlaps(_dragElement.worldBound) &&
-            dropzoneElement.Element != _dragDropEventBundle.SourceVisualElement).ToList();
+        var overlappedDropzones = StackItemDragDropHandler.Dropzones.Where(dropzone =>
+            dropzone.VisualElement.worldBound.Overlaps(StackItemDragDropHandler.DragElement.worldBound) &&
+            dropzone.VisualElement != StackItemDragDropHandler.SourceDropzone.VisualElement).ToList();
         if (overlappedDropzones.Count == 0) {
             LeaveDropzone();
             return;
         }
 
-        foreach (var dropzoneElement in overlappedDropzones) {
-            Debug.Log("OVERLAP: " + dropzoneElement.Element.name);
-            DragOverDropzone(dropzoneElement);
+        foreach (var overlappedDropzone in overlappedDropzones) {
+            Debug.Log("OVERLAP: " + overlappedDropzone.VisualElement.name);
+            DragOverDropzone(overlappedDropzone);
         }
     }
 
     private void ImageMouseUp(MouseUpEvent evt) {
-        if (!IsDragging) return;
+        if (!StackItemDragDropHandler.IsDragging) return;
 
-        Debug.Log("IMAGE MOUSE UP: " + ActiveDropzone);
+        Debug.Log("IMAGE MOUSE UP: " + StackItemDragDropHandler.IsOverTargetDropzone);
 
         // if mouse is over a dropzone
-        // then send item info to dropzone & remove item from inventory
-        if (ActiveDropzone) {
-            _dropzone.DropComplete(_dragDropEventBundle.StackItem, playerPermDataSo, _dropzone.ContainerIndex);
+        if (StackItemDragDropHandler.IsOverTargetDropzone && StackItemDragDropHandler.IsValidDrop) {
+            StackItemDragDropHandler.Drop();
         }
 
         // cleanup
-        _dragDropEventBundle.SourceVisualElement.style.opacity = 1f;
-        _dragDropEventBundle = null;
-        _root.Remove(_dragElement);
-        _dragElement = null;
-        _dropzone = null;
+        _root.Remove(StackItemDragDropHandler.DragElement);
+        StackItemDragDropHandler.CleanUp();
     }
 
-    private void DragOverDropzone(DropzoneElement dropzoneElement) {
-        if (dropzoneElement != null) {
-            LeaveDropzone();
-        }
-
-        _dropzone = dropzoneElement;
-        _dropzone?.HighlightDropzone(_dragDropEventBundle.StackItem);
+    private void DragOverDropzone(StackItemDropzone targetDropzone) {
+        if (StackItemDragDropHandler.TargetDropzone == targetDropzone) return;
+        StackItemDragDropHandler.SetTargetDropzone(targetDropzone);
     }
 
     private void LeaveDropzone() {
-        if (_dropzone == null) return;
-
-        _dropzone.ResetDropzoneColor();
-        _dropzone = null;
+        if (StackItemDragDropHandler.TargetDropzone == null) return;
+        StackItemDragDropHandler.UnsetTargetDropzone();
     }
 
     // private class DropzoneElement {
@@ -368,43 +383,123 @@ public class InventoryUI : MonoBehaviour {
 }
 
 public class StackItemDropzone {
-    private StackItem _stackItem;
-    private VisualElement _visualElement; // container element that shows item image and potentially stack size
-    private List<ItemType> _allowedTypes;
+    private readonly List<ItemType> _allowedTypes;
+    private readonly VisualElement _dropzoneSlotVisualElement;
+    private readonly StyleColor _defaultBgColor;
+    private readonly Color _green;
+    private readonly Color _red;
 
-    public Func<StackItem, TargetDropdownResult> TargetFunc { get; }
-    public Action<TargetDropdownResult> SourceFunc { get; }
+    public StackItem StackItem { get; }
+    public int StackItemContainerIndex { get; }
+    public VisualElement VisualElement { get; } // container element that shows item image and potentially stack size
+    public Func<StackItem, TargetDropdownResult> TargetEvent { get; }
+    public Action<int, TargetDropdownResult> SourceEvent { get; }
 
     public StackItemDropzone(VisualElement visualElement, IEnumerable<ItemType> allowedTypes,
-        Func<StackItem, TargetDropdownResult> targetFunc, Action<TargetDropdownResult> sourceFunc,
-        StackItem stackItem = null) {
-        _visualElement = visualElement;
+        Func<StackItem, TargetDropdownResult> targetEvent, Action<int, TargetDropdownResult> sourceEvent,
+        StackItem stackItem = null, int stackItemContainerIndex = -1) {
+        VisualElement = visualElement;
         _allowedTypes = allowedTypes.ToList();
-        _stackItem = stackItem;
-        TargetFunc = targetFunc;
-        SourceFunc = sourceFunc;
+        StackItem = stackItem;
+        StackItemContainerIndex = stackItemContainerIndex;
+        TargetEvent = targetEvent;
+        SourceEvent = sourceEvent;
+        
+        _dropzoneSlotVisualElement = VisualElement.Q<VisualElement>("DropzoneSlot");
+        _defaultBgColor = _dropzoneSlotVisualElement.style.backgroundColor;
+        _green = Color.green;
+        _green.a = .05f;
+        _red = Color.red;
+        _red.a = .05f;
+    }
+
+    public void UpdateItemImage() {
+        // update UI Image based on the StackItem associated with this dropzone
+    }
+    
+    public bool IsValidItem(StackItem stackItem) {
+        if (!IsItemTypeAccepted(stackItem.Item.ItemType)) return false;
+    
+        return !StackItem?.IsMaxed ?? true;
+    }
+    
+    private bool IsItemTypeAccepted(ItemType dragItemType) {
+        return _allowedTypes.Contains(dragItemType);
+    }
+
+    public void HighlightDropzone(bool isValid) {
+        Debug.Log("HIGHLIGHTING");
+        _dropzoneSlotVisualElement.style.backgroundColor = isValid ? _green : _red;
+    }
+    
+    public void ResetDropzoneColor() {
+        _dropzoneSlotVisualElement.style.backgroundColor = _defaultBgColor;
     }
 }
 
 public static class StackItemDragDropHandler {
-    private static List<StackItemDropzone> _dropzones;
-    private static StackItemDropzone _sourceDropzone;
-    private static StackItemDropzone _targetDropzone;
+    public static List<StackItemDropzone> Dropzones { get; }
+    public static StackItemDropzone SourceDropzone { get; private set; }
+    public static StackItemDropzone TargetDropzone { get; private set; }
+    public static VisualElement DragElement { get; set; }
+    public static bool IsValidDrop { get; private set; }
+    public static bool IsDragging => SourceDropzone != null;
+    public static bool IsOverTargetDropzone => TargetDropzone != null;
 
     static StackItemDragDropHandler() {
-        _dropzones = new List<StackItemDropzone>();
+        Dropzones = new List<StackItemDropzone>();
     }
-
-    public static bool IsDragging => _sourceDropzone != null;
-    public static bool IsOverATargetDropzone => _targetDropzone != null;
 
     public static void RegisterDropzone(StackItemDropzone dropzone) {
-        _dropzones.Add(dropzone);
+        Dropzones.Add(dropzone);
     }
 
+    public static void SetSourceDropzone(StackItemDropzone sourceDropzone) {
+        SourceDropzone = sourceDropzone;
+    }
+    
+    public static void SetTargetDropzone(StackItemDropzone targetDropzone) {
+        if (TargetDropzone != null) {
+            // unset previous target
+            UnsetTargetDropzone();
+        }
+        
+        TargetDropzone = targetDropzone;
+        IsValidDrop = TargetDropzone.IsValidItem(SourceDropzone.StackItem);
+        TargetDropzone?.HighlightDropzone(IsValidDrop);
+    }
+
+    public static void UnsetTargetDropzone() {
+        TargetDropzone.ResetDropzoneColor();
+        TargetDropzone = null;
+    }
+
+    public static void CreateDragElement() { }
+
     public static void Drop() {
-        var result = _targetDropzone.TargetFunc();
-        _sourceDropzone.SourceFunc(result);
+        var result = TargetDropzone.TargetEvent(SourceDropzone.StackItem);
+        SourceDropzone.SourceEvent(SourceDropzone.StackItem.Amount, result);
+
+        if (!result.ItemAccepted) return;
+
+        SourceDropzone.UpdateItemImage();
+        TargetDropzone.UpdateItemImage();
+    }
+
+    public static void CleanUp() {
+        ApplySourceDragCompleteStyling();
+        TargetDropzone?.ResetDropzoneColor();
+        DragElement = null;
+        SourceDropzone = null;
+        TargetDropzone = null;
+    }
+
+    public static void ApplySourceDragStyling() {
+        SourceDropzone.VisualElement.style.opacity = 0.1f;
+    }
+
+    private static void ApplySourceDragCompleteStyling() {
+        SourceDropzone.VisualElement.style.opacity = 1f;
     }
 }
 
@@ -416,14 +511,8 @@ public class TargetDropdownResult {
         ItemAccepted = itemAccepted;
         RemainingAmount = remainingAmount;
     }
-}
 
-// what happens on drop?
-// dropzone defines what happens when it RECIEVES a new StackItem AND when it successfully SENDS it's StackItem
-// FLOW:
-// Pick-up item from _sourceDropzone
-// Drag-overs form potential _targetDropzones
-// Place item on _targetDropzone
-// _targetDropzone runs it's custom func that handles what to do with the request to accept a new item...
-//  and returns information to _sourceDropzone based on the result
-// _sourceDropzone will then run custom func that handles what to do based on the _targetDropzone's returned results
+    public override string ToString() {
+        return $"ItemAccepted: {ItemAccepted}, RemainingAmount: {RemainingAmount}";
+    }
+}

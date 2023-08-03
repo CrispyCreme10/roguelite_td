@@ -5,8 +5,8 @@ public class SurvivorHUD : MonoBehaviour
 {
     [SerializeField] private HealthController survivorHealthController;
     
-    private VisualElement _root;
-    private VisualElement _healthbarFill;
+    private UnityEngine.UIElements.VisualElement _root;
+    private UnityEngine.UIElements.VisualElement _healthbarFill;
     
     private void OnEnable()
     {

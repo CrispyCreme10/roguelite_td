@@ -41,4 +41,11 @@ public class PlayerLoadoutSO : ScriptableObject {
         equipment[index] = equipmentItem.Item;
         return true;
     }
+
+    public bool TryRemoveEquipment(int index) {
+        if (index < 0 || index >= equipment.Capacity || equipment[index] == null) return false;
+
+        equipment[index] = null;
+        return true;
+    }
 }
