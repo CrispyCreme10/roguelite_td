@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Player Loadout")]
 public class PlayerLoadoutSO : ScriptableObject {
-    [SerializeField] private List<ItemSO> equipment = new List<ItemSO>(3);
-    [SerializeField] private List<ItemSO> modifiers = new List<ItemSO>(3);
-    [SerializeField] private List<ItemSO> towers = new List<ItemSO>(4);
-    [SerializeField] private List<ItemSO> utilities = new List<ItemSO>(2);
-    [SerializeField] private ItemSO backpack;
-    [SerializeField] private ItemSO pouch;
+    [SerializeField] private List<StackItem> equipment = new List<StackItem>(3);
+    [SerializeField] private List<StackItem> modifiers = new List<StackItem>(3);
+    [SerializeField] private List<StackItem> towers = new List<StackItem>(4);
+    [SerializeField] private List<StackItem> utilities = new List<StackItem>(2);
+    [SerializeField] private StackItem backpack;
+    [SerializeField] private StackItem pouch;
     [SerializeField] private InventorySO backpackSlots;
     [SerializeField] private InventorySO pouchSlots;
 
@@ -17,28 +18,33 @@ public class PlayerLoadoutSO : ScriptableObject {
 
     public InventorySO BackpackSlots => backpackSlots;
 
-    public ItemSO Pouch => pouch;
+    public StackItem Pouch => pouch;
 
-    public ItemSO Backpack => backpack;
+    public StackItem Backpack => backpack;
 
-    public List<ItemSO> Utilities => utilities;
+    public List<StackItem> Utilities => utilities;
 
-    public List<ItemSO> Towers => towers;
+    public List<StackItem> Towers => towers;
 
-    public List<ItemSO> Modifiers => modifiers;
+    public List<StackItem> Modifiers => modifiers;
 
-    public List<ItemSO> Equipment => equipment;
+    public List<StackItem> Equipment => equipment;
 
-    public bool IsEquipmentFull => equipment.Count == equipment.Capacity;
+    public bool IsEquipmentFull => equipment.Count(e => e.IsMaxed) == equipment.Capacity;
     public bool IsModifiersFull => modifiers.Count == modifiers.Capacity;
     public bool IsTowersFull => towers.Count == towers.Capacity;
     public bool IsUtilitiesFull => utilities.Count == utilities.Capacity;
 
+    public StackItem GetEquipmentAtIndex(int index) {
+        if (index < 0 || index >= equipment.Count) return null;
+        return equipment[index];
+    }
+    
     public bool TryAddEquipment(StackItem equipmentItem, int index) {
         if (equipmentItem.Item.ItemType != ItemType.Equipment || index < 0 || index >= equipment.Capacity ||
             IsEquipmentFull || equipment[index] != null) return false;
 
-        equipment[index] = equipmentItem.Item;
+        equipment[index] = equipmentItem;
         return true;
     }
 

@@ -13,20 +13,38 @@ MonoBehaviour:
   m_Name: PlayerLoadout
   m_EditorClassIdentifier: 
   equipment:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - item: {fileID: 0}
+    amount: 0
+  - item: {fileID: 0}
+    amount: 0
+  - item: {fileID: 0}
+    amount: 0
   modifiers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - item: {fileID: 0}
+    amount: 0
+  - item: {fileID: 0}
+    amount: 0
+  - item: {fileID: 0}
+    amount: 0
   towers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  utilities: []
-  backpack: {fileID: 0}
-  pouch: {fileID: 0}
+  - item: {fileID: 0}
+    amount: 0
+  - item: {fileID: 0}
+    amount: 0
+  - item: {fileID: 0}
+    amount: 0
+  - item: {fileID: 0}
+    amount: 0
+  utilities:
+  - item: {fileID: 0}
+    amount: 0
+  - item: {fileID: 0}
+    amount: 0
+  backpack:
+    item: {fileID: 0}
+    amount: 0
+  pouch:
+    item: {fileID: 0}
+    amount: 0
   backpackSlots: {fileID: 11400000, guid: b26cbb05997c88d4eb97d753a60cc71d, type: 2}
   pouchSlots: {fileID: 11400000, guid: c3f2648d544f5ea479f09e7859dfe66e, type: 2}

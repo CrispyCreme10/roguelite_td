@@ -15,11 +15,13 @@ MonoBehaviour:
   size: 35
   items:
   - item: {fileID: 11400000, guid: 2d5b3f67d0c8ab043aa2d11e527d0107, type: 2}
-    amount: 200
-  - item: {fileID: 0}
-    amount: 50
-  - item: {fileID: 11400000, guid: 2d5b3f67d0c8ab043aa2d11e527d0107, type: 2}
     amount: 1000
+  - item: {fileID: 11400000, guid: 2d5b3f67d0c8ab043aa2d11e527d0107, type: 2}
+    amount: 800
+  - item: {fileID: 11400000, guid: e282513e4d59bfb4e9e4e70cb484e14e, type: 2}
+    amount: 1
+  - item: {fileID: 0}
+    amount: 0
   - item: {fileID: 0}
     amount: 0
   - item: {fileID: 0}

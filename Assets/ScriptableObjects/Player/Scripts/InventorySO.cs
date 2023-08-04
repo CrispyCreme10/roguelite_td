@@ -19,9 +19,9 @@ public class InventorySO : ScriptableObject {
 
     public List<StackItem> Items => items;
     public int Size => size;
-    public bool IsFull => items.Count == size;
+    private bool IsFull => items.Count == size;
     public bool IsEmpty => items.Count == 0;
-    public int AvailableSlots => items.Count(i => i.IsEmpty);
+    private int AvailableSlots => items.Count(i => i.IsEmpty);
 
     public StackItem GetItemAtIndex(int index) {
         return index < items.Count ? items[index] : null;
@@ -71,7 +71,7 @@ public class InventorySO : ScriptableObject {
         if (stackItem.Amount == 0 || targetIndex < 0 || targetIndex >= items.Count) return -1;
 
         var stackItemAtIndex = items[targetIndex];
-        if (stackItemAtIndex != null) {
+        if (stackItemAtIndex != null && stackItemAtIndex.Item != null) {
             // return if mismatch types
             if (stackItemAtIndex.Item.name != stackItem.Item.name) return -1;
             
@@ -87,7 +87,8 @@ public class InventorySO : ScriptableObject {
             return 0;
         }
 
-        items[targetIndex] = stackItem;
+        
+        items[targetIndex].CopyStackItem(stackItem);
         return 0;
     }
 
@@ -96,7 +97,7 @@ public class InventorySO : ScriptableObject {
 
         var item = items[index];
         if (item.DecreaseAmount(decreaseAmount) == 0) {
-            items.RemoveAt(index);
+            RemoveItem(index);
         }
 
         InvokeInventoryUpdate();
@@ -114,57 +115,15 @@ public class InventorySO : ScriptableObject {
         OnInventoryUpdate?.Invoke();
     }
 
+    private void RemoveItem(int index) {
+        if (index < 0 || index >= items.Count) return;
+        items[index].Reset();
+    }
+
     private void DrawItemsButtons() {
         if (!SirenixEditorGUI.ToolbarButton(EditorIcons.ArrowDown)) return;
         for (var i = 0; i < size - items.Count; i++) {
             items.Add(new StackItem());
         }
     }
-}
-
-[Serializable]
-public class StackItem {
-    [SerializeField] private ItemSO item;
-    [SerializeField] private int amount;
-
-    public int Amount => amount;
-    public ItemSO Item => item;
-    public bool IsEmpty => amount == 0;
-    public bool IsMaxed => item != null && amount == item.StackSize;
-
-    public StackItem() {
-        item = null;
-        amount = 0;
-    }
-
-    public StackItem(ItemSO item, int amount) {
-        this.item = item;
-        this.amount = amount;
-    }
-
-    public int DecreaseAmount(int amt) {
-        int newAmt = amount - amt;
-        amount = newAmt <= 0 ? 0 : newAmt;
-        return amount;
-    }
-
-    public int IncreaseAmount(int amt) {
-        if (!CanStack(amount)) return amount;
-        amount += amt;
-        return amount;
-    }
-
-    public bool CanStack(int increaseAmt) {
-        return amount + increaseAmt <= item.StackSize;
-    }
-}
-
-public enum StackItemContainerType {
-    Equipment,
-    Modifier,
-    Tower,
-    Utility,
-    Inventory,
-    Backpack,
-    Pouch
 }
