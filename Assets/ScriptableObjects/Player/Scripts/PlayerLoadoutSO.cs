@@ -42,16 +42,16 @@ public class PlayerLoadoutSO : ScriptableObject {
     
     public bool TryAddEquipment(StackItem equipmentItem, int index) {
         if (equipmentItem.Item.ItemType != ItemType.Equipment || index < 0 || index >= equipment.Capacity ||
-            IsEquipmentFull || equipment[index] != null) return false;
+            IsEquipmentFull || equipment[index].IsMaxed) return false;
 
-        equipment[index] = equipmentItem;
+        equipment[index].CopyStackItem(equipmentItem);
         return true;
     }
 
     public bool TryRemoveEquipment(int index) {
         if (index < 0 || index >= equipment.Capacity || equipment[index] == null) return false;
 
-        equipment[index] = null;
+        equipment[index].Reset();
         return true;
     }
 }

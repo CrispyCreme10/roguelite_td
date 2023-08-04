@@ -28,8 +28,14 @@ public class InventoryUI : MonoBehaviour {
 
     private void Awake() {
         SetupRoot();
-        SetupDropzones();
+        SetupLoadoutDropzones();
         _playerInventorySlots = _root.Q<ScrollView>("InventorySlots");
+    }
+
+    private void Start() {
+        BuildInventorySlots();
+        BuildBackpackSlots();
+        BuildPouchSlots();
     }
 
     private void SetupRoot() {
@@ -37,29 +43,10 @@ public class InventoryUI : MonoBehaviour {
         StackItemDragDropHandler.SetRoot(_root);
     }
 
-    private void SetupDropzones() {
+    private void SetupLoadoutDropzones() {
         // equipment
-        _equipmentLoadoutSlot1 = _root.Q<VisualElement>("EquipmentSlot1");
-        StackItemDragDropHandler.RegisterDropzone(new StackItemDropzone(
-            new DropzoneVisualElement(_equipmentLoadoutSlot1),
-            new[] { ItemType.Equipment },
-            retrievalIndex => Singleton.Instance.PlayerManager.PlayerData.Loadout.GetEquipmentAtIndex(retrievalIndex),
-            newStackItem => {
-                // attempt to add equipment to slot
-                Debug.Log("Equipment 1 TARGET");
-                var addedEquipmentToLoadout = Singleton.Instance.PlayerManager.PlayerData.Loadout.TryAddEquipment(newStackItem, 0);
-                return new TargetDropdownResult(addedEquipmentToLoadout, 0);
-            },
-            (selfStackItem, targetDropdownResult) => {
-                if (targetDropdownResult.ItemAccepted) {
-                    // remove item from Equipment Slot 1
-                    Singleton.Instance.PlayerManager.PlayerData.Loadout.TryRemoveEquipment(0);
-                }
-            },0));
-        // _equipmentLoadoutSlot2 = _root.Q<VisualElement>("EquipmentSlot2");
-        // _dropzoneElements.Add(new DropzoneElement(_equipmentLoadoutSlot2, StackItemContainerType.Equipment, 1));
-        // _equipmentLoadoutSlot3 = _root.Q<VisualElement>("EquipmentSlot3");
-        // _dropzoneElements.Add(new DropzoneElement(_equipmentLoadoutSlot3, StackItemContainerType.Equipment, 2));
+        SetupEquipmentDropzones();
+
         // // modifiers
         // _modifierLoadoutSlot1 = _root.Q<VisualElement>("ModifierSlot1");
         // _dropzoneElements.Add(new DropzoneElement(_modifierLoadoutSlot1, StackItemContainerType.Modifier));
@@ -89,50 +76,76 @@ public class InventoryUI : MonoBehaviour {
         // _dropzoneElements.Add(new DropzoneElement(_pouchLoadoutSlot, StackItemContainerType.Pouch));
     }
 
-    private void Start() {
-        BuildInventorySlots();
-        BuildBackpackSlots();
-        BuildPouchSlots();
+    private void SetupEquipmentDropzones() {
+        _equipmentLoadoutSlot1 = _root.Q<VisualElement>("EquipmentSlot1");
+        const int equipment1Index = 0;
+        StackItemDragDropHandler.RegisterDropzone(new StackItemDropzone(
+            new DropzoneVisualElement(_equipmentLoadoutSlot1),
+            new[] { ItemType.Equipment },
+            retrievalIndex => Singleton.Instance.PlayerManager.PlayerData.Loadout.GetEquipmentAtIndex(retrievalIndex),
+            newStackItem => {
+                // attempt to add equipment to slot
+                Debug.Log("Equipment 1 TARGET");
+                var addedEquipmentToLoadout =
+                    Singleton.Instance.PlayerManager.PlayerData.Loadout.TryAddEquipment(newStackItem, equipment1Index);
+                return new TargetDropdownResult(addedEquipmentToLoadout, 0);
+            },
+            (selfStackItem, targetDropdownResult) => {
+                if (targetDropdownResult.ItemAccepted) {
+                    // remove item from Equipment Slot 1
+                    Singleton.Instance.PlayerManager.PlayerData.Loadout.TryRemoveEquipment(equipment1Index);
+                }
+            }, equipment1Index)
+        );
+
+        _equipmentLoadoutSlot2 = _root.Q<VisualElement>("EquipmentSlot2");
+        const int equipment2Index = 1;
+        StackItemDragDropHandler.RegisterDropzone(new StackItemDropzone(
+            new DropzoneVisualElement(_equipmentLoadoutSlot2),
+            new[] { ItemType.Equipment },
+            retrievalIndex => Singleton.Instance.PlayerManager.PlayerData.Loadout.GetEquipmentAtIndex(retrievalIndex),
+            newStackItem => {
+                // attempt to add equipment to slot
+                Debug.Log("Equipment 2 TARGET");
+                var addedEquipmentToLoadout =
+                    Singleton.Instance.PlayerManager.PlayerData.Loadout.TryAddEquipment(newStackItem, equipment2Index);
+                return new TargetDropdownResult(addedEquipmentToLoadout, 0);
+            },
+            (selfStackItem, targetDropdownResult) => {
+                if (targetDropdownResult.ItemAccepted) {
+                    // remove item from Equipment Slot 1
+                    Singleton.Instance.PlayerManager.PlayerData.Loadout.TryRemoveEquipment(equipment2Index);
+                }
+            }, equipment2Index)
+        );
+
+        _equipmentLoadoutSlot3 = _root.Q<VisualElement>("EquipmentSlot3");
+        const int equipment3Index = 2;
+        StackItemDragDropHandler.RegisterDropzone(new StackItemDropzone(
+            new DropzoneVisualElement(_equipmentLoadoutSlot3),
+            new[] { ItemType.Equipment },
+            retrievalIndex => Singleton.Instance.PlayerManager.PlayerData.Loadout.GetEquipmentAtIndex(retrievalIndex),
+            newStackItem => {
+                // attempt to add equipment to slot
+                Debug.Log("Equipment 3 TARGET");
+                var addedEquipmentToLoadout =
+                    Singleton.Instance.PlayerManager.PlayerData.Loadout.TryAddEquipment(newStackItem, equipment3Index);
+                return new TargetDropdownResult(addedEquipmentToLoadout, 0);
+            },
+            (selfStackItem, targetDropdownResult) => {
+                if (targetDropdownResult.ItemAccepted) {
+                    // remove item from Equipment Slot 1
+                    Singleton.Instance.PlayerManager.PlayerData.Loadout.TryRemoveEquipment(equipment3Index);
+                }
+            }, equipment3Index)
+        );
     }
 
-    private void BuildInventorySlots() {
-        var container = new VisualElement {
-            style = {
-                flexDirection = new StyleEnum<FlexDirection>(FlexDirection.Row),
-                flexWrap = new StyleEnum<Wrap>(Wrap.Wrap)
-            }
-        };
-        for (var i = 0; i < Singleton.Instance.PlayerManager.PlayerData.Inventory.Size; i++) {
-            var dropzoneVisualElement = MakeInventorySlot(SlotSize);
-            var copyIndex = i;
-            var slotDropzone = new StackItemDropzone(
-                dropzoneVisualElement,
-                new[] {
-                    ItemType.Backpack, ItemType.Consumable, ItemType.Crafting, ItemType.Currency,
-                    ItemType.Equipment,
-                    ItemType.Modifier, ItemType.Pouch, ItemType.Tower, ItemType.Utility
-                },
-                retrievalIndex => Singleton.Instance.PlayerManager.PlayerData.Inventory.GetItemAtIndex(retrievalIndex),
-                newStackItem => {
-                    // safe to assume new stackItem is valid to be placed here?
-                    Debug.Log("Inventory Slot Target: " + newStackItem.Item.name);
-                    var remainingAmount = Singleton.Instance.PlayerManager.PlayerData.Inventory.TryAddItemAtIndex(newStackItem, copyIndex);
-                    return new TargetDropdownResult(remainingAmount > -1, remainingAmount);
-                },
-                (selfStackItemAmount, targetDropdownResult) => {
-                    Debug.Log("Inventory Slot SOURCE: " + targetDropdownResult);
-                    if (!targetDropdownResult.ItemAccepted) return;
-                    Singleton.Instance.PlayerManager.PlayerData.Inventory.TryRemoveItem(copyIndex,
-                        selfStackItemAmount - targetDropdownResult.RemainingAmount);
-                },
-                copyIndex
-            );
-            StackItemDragDropHandler.RegisterDropzone(slotDropzone);
-            container.Add(dropzoneVisualElement.MainVisualElement);
-        }
+    private void SetupModifierDropzones() { }
 
-        _playerInventorySlots.Add(container);
-    }
+    private void SetupTowerDropzones() { }
+
+    private void SetupUtilityDropzones() { }
 
     private static void BuildBackpackSlots() {
         if (Singleton.Instance.PlayerManager.PlayerData.Loadout.Backpack == null) return;
@@ -156,6 +169,47 @@ public class InventoryUI : MonoBehaviour {
         };
     }
 
+    private void BuildInventorySlots() {
+        var container = new VisualElement {
+            style = {
+                flexDirection = new StyleEnum<FlexDirection>(FlexDirection.Row),
+                flexWrap = new StyleEnum<Wrap>(Wrap.Wrap)
+            }
+        };
+        for (var i = 0; i < Singleton.Instance.PlayerManager.PlayerData.Inventory.Size; i++) {
+            var dropzoneVisualElement = MakeInventorySlot(SlotSize);
+            var copyIndex = i;
+            var slotDropzone = new StackItemDropzone(
+                dropzoneVisualElement,
+                new[] {
+                    ItemType.Backpack, ItemType.Consumable, ItemType.Crafting, ItemType.Currency,
+                    ItemType.Equipment,
+                    ItemType.Modifier, ItemType.Pouch, ItemType.Tower, ItemType.Utility
+                },
+                retrievalIndex => Singleton.Instance.PlayerManager.PlayerData.Inventory.GetItemAtIndex(retrievalIndex),
+                newStackItem => {
+                    // safe to assume new stackItem is valid to be placed here?
+                    Debug.Log("Inventory Slot Target: " + newStackItem.Item.name);
+                    var remainingAmount =
+                        Singleton.Instance.PlayerManager.PlayerData.Inventory
+                            .TryAddItemAtIndex(newStackItem, copyIndex);
+                    return new TargetDropdownResult(remainingAmount > -1, remainingAmount);
+                },
+                (selfStackItemAmount, targetDropdownResult) => {
+                    Debug.Log("Inventory Slot SOURCE: " + targetDropdownResult);
+                    if (!targetDropdownResult.ItemAccepted) return;
+                    Singleton.Instance.PlayerManager.PlayerData.Inventory.TryRemoveItem(copyIndex,
+                        selfStackItemAmount - targetDropdownResult.RemainingAmount);
+                },
+                copyIndex
+            );
+            StackItemDragDropHandler.RegisterDropzone(slotDropzone);
+            container.Add(dropzoneVisualElement.MainVisualElement);
+        }
+
+        _playerInventorySlots.Add(container);
+    }
+
     private static DropzoneVisualElement MakeInventorySlot(float size) {
         var newSlot = new VisualElement {
             name = "DropzoneSlot",
@@ -174,6 +228,11 @@ public class InventoryUI : MonoBehaviour {
         newSlot.AddToClassList("loadout-slot");
         newSlot.AddToClassList("inventory-slot-border");
 
-        return new DropzoneVisualElement(newSlot);
+        var container = new VisualElement {
+            name = "InventorySlot"
+        };
+
+        container.Add(newSlot);
+        return new DropzoneVisualElement(container);
     }
 }

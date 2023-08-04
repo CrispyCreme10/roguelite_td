@@ -82,8 +82,8 @@ namespace DragDrop {
             var dragImage = new Image {
                 sprite = dropzone.StackItem.Item.Icon,
                 style = {
-                    height = 115f * 0.5f,
-                    width = 115f * 0.5f
+                    height = 115f * ( dropzone.StackItem.Amount > 1 ? 0.5f : 0.85f),
+                    width = 115f * ( dropzone.StackItem.Amount > 1 ? 0.5f : 0.85f)
                 }
             };
             DragElement = new VisualElement {
@@ -114,19 +114,17 @@ namespace DragDrop {
                 mousePosAdj.y - DragElement.worldBound.height / 2;
             DragElement.style.left =
                 mousePosAdj.x - DragElement.worldBound.width / 2;
-            DragElement.style.opacity = 0.1f;
+            DragElement.style.opacity = 0.15f;
             DragElement.pickingMode = PickingMode.Ignore;
 
             // check dropzone overlaps
             var overlappedDropzones = Dropzones.Where(dropzone =>
-                dropzone.DropzoneVisualElement.MainVisualElement.worldBound.Overlaps(DragElement
-                    .worldBound) &&
-                dropzone.DropzoneVisualElement != SourceDropzone.DropzoneVisualElement).ToList();
+                dropzone.DropzoneVisualElement.MainVisualElement.worldBound.Contains(mousePosAdj)).ToList();
             if (overlappedDropzones.Count == 0) {
                 LeaveDropzone();
                 return;
             }
-
+            
             foreach (var overlappedDropzone in overlappedDropzones) {
                 Debug.Log("OVERLAP: " + overlappedDropzone.DropzoneVisualElement.MainVisualElement.name);
                 DragOverDropzone(overlappedDropzone);

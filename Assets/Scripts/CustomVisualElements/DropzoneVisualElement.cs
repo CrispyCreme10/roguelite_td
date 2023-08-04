@@ -11,7 +11,7 @@ namespace CustomVisualElements {
 
         private Image _itemImage;
         private Label _itemCountLabel;
-        
+
         public VisualElement MainVisualElement { get; }
 
         public DropzoneVisualElement(VisualElement mainVisualElement) {
@@ -23,17 +23,16 @@ namespace CustomVisualElements {
             _red = Color.red;
             _red.a = .05f;
         }
-        
+
         public void InitStackItemElements(StackItemDropzone parentDropzone) {
             if (parentDropzone.StackItem == null) return;
             CreateAndSetImage(parentDropzone);
-            if (parentDropzone.StackItem.Amount <= 1) return;
             CreateAndSetLabel(parentDropzone.StackItem);
         }
 
         private static Image CreateImage(StackItem stackItem) {
-            var length = new Length(stackItem.Amount > 1 ? 50 : 90, LengthUnit.Percent);
-            
+            var length = new Length(stackItem.Amount > 1 ? 50 : 85, LengthUnit.Percent);
+
             return new Image {
                 name = "ItemImage",
                 sprite = stackItem.Item.Icon,
@@ -65,13 +64,15 @@ namespace CustomVisualElements {
         private void CreateAndSetImage(StackItemDropzone parentDropzone) {
             if (parentDropzone.StackItem.IsEmpty) return;
             _itemImage = CreateImage(parentDropzone.StackItem);
-            MainVisualElement.Add(_itemImage);
-            _itemImage.RegisterCallback<MouseDownEvent, StackItemDropzone>(StackItemDragDropHandler.ImageMouseDown, parentDropzone);
+            _dropzoneSlotVisualElement.Add(_itemImage);
+            _itemImage.RegisterCallback<MouseDownEvent, StackItemDropzone>(StackItemDragDropHandler.ImageMouseDown,
+                parentDropzone);
         }
-        
+
         private void CreateAndSetLabel(StackItem stackItem) {
+            if (stackItem.Amount <= 1) return;
             _itemCountLabel = CreateLabel(stackItem);
-            MainVisualElement.Add(_itemCountLabel);
+            _dropzoneSlotVisualElement.Add(_itemCountLabel);
         }
 
         private bool UpdateImage(Sprite newIcon) {
@@ -82,24 +83,24 @@ namespace CustomVisualElements {
 
         private bool UpdateLabel(int amount) {
             if (_itemCountLabel == null) return false;
-            
+
             _itemCountLabel.text = amount.ToString();
             return true;
         }
 
         private void RemoveImage() {
-            MainVisualElement.Remove(_itemImage);
+            _dropzoneSlotVisualElement.Remove(_itemImage);
             _itemImage = null;
         }
 
         private void RemoveLabel() {
-            MainVisualElement.Remove(_itemCountLabel);
+            _dropzoneSlotVisualElement.Remove(_itemCountLabel);
             _itemCountLabel = null;
         }
 
         public void UpdateElements(StackItemDropzone parentDropzone) {
             if (parentDropzone.StackItem.Item == null) {
-                if (_itemImage != null) 
+                if (_itemImage != null)
                     RemoveImage();
             } else {
                 var success = UpdateImage(parentDropzone.StackItem.Item.Icon);
@@ -116,21 +117,21 @@ namespace CustomVisualElements {
                     CreateAndSetLabel(parentDropzone.StackItem);
             }
         }
-        
+
         public void HighlightDropzone(bool isValid) {
             _dropzoneSlotVisualElement.style.backgroundColor = isValid ? _green : _red;
         }
-        
+
         public void ResetDropzoneColor() {
             _dropzoneSlotVisualElement.style.backgroundColor = _defaultBgColor;
         }
-        
+
         public void ApplySourceDragStyling() {
-            MainVisualElement.style.opacity = 0.1f;
+            _dropzoneSlotVisualElement.style.opacity = 0.1f;
         }
 
         public void ApplySourceDragCompleteStyling() {
-            MainVisualElement.style.opacity = 1f;
+            _dropzoneSlotVisualElement.style.opacity = 1f;
         }
     }
 }

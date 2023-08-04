@@ -77,3 +77,14 @@
     padding-top: 0;
     padding-bottom: 0;
 }
+
+#DropzoneSlot {
+    justify-content: center;
+    align-self: auto;
+    align-items: center;
+}
+
+#DropzoneSlot > Label {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.2);
+}
