@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/global.uss?fileID=7433441132597879392&amp;guid=9406623aa48ec8440816738b6d4b2f1c&amp;type=3#global" />
+    <ui:VisualElement name="Root" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: center;">
+        <ui:Label tabindex="-1" text="Rogue-Lite TD" display-tooltip-when-elided="true" name="Title" style="font-size: 100px; color: rgb(255, 255, 255); -unity-text-align: upper-center; margin-top: 189px; margin-bottom: 25px;" />
+        <ui:Button text="Play" display-tooltip-when-elided="true" name="PlayBtn" class="main-btn" />
+        <ui:Button text="Loadout" display-tooltip-when-elided="true" name="LoadoutBtn" class="main-btn" />
+        <ui:Button text="Shop" display-tooltip-when-elided="true" name="ShopBtn" class="main-btn" />
+        <ui:Button text="Settings" display-tooltip-when-elided="true" name="SettingsBtn" class="main-btn" />
+        <ui:Button text="Exit" display-tooltip-when-elided="true" name="ExitBtn" class="main-btn" />
+    </ui:VisualElement>
+</ui:UXML>

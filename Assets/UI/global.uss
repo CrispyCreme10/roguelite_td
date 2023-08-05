@@ -1,0 +1,14 @@
+.main-btn {
+    width: 300px;
+    height: 100px;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    font-size: 35px;
+    margin-bottom: 35px;
+}
+
+.main-btn:hover {
+    background-color: rgb(162, 162, 162);
+}

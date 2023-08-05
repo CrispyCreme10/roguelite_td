@@ -26,6 +26,7 @@ public enum ItemType
     Crafting,
     Consumable,
     Equipment,
+    Ammo,
     Modifier,
     Utility,
     Tower,
