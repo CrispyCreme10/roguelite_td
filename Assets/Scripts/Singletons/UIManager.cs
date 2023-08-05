@@ -20,13 +20,13 @@ public class UIManager : MonoBehaviour
 
         _documents = new Dictionary<string, UIDocument>();
         foreach (var doc in GetComponentsInChildren<UIDocument>()) {
+            _documents[doc.name] = doc;
             if (doc.name == DocumentNames.MAIN_MENU) {
                 // display flex & set key for default active
                 _activeDocumentKey = doc.name;
                 ShowDocument(_activeDocumentKey);
                 continue;
             }
-            _documents[doc.name] = doc;
             HideDocument(doc.name);
         }
     }
