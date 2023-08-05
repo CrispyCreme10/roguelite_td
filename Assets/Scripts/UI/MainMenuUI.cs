@@ -1,18 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class MainMenuUI : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+public class MainMenuUI : MonoBehaviour {
+
+    private VisualElement _root;
+    private Button _loadoutBtn;
+
+    private void Awake() {
+        _root = GetComponent<UIDocument>().rootVisualElement;
+        _loadoutBtn = _root.Q<Button>("LoadoutBtn");
+        RegisterLoadoutButton();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void RegisterLoadoutButton() {
+        _loadoutBtn?.RegisterCallback<PointerUpEvent, string>(DocumentNames.HandleNavigationClick,
+            DocumentNames.LOADOUT);
     }
 }

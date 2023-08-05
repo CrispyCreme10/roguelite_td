@@ -1,6 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/PlayerInventory.uss?fileID=7433441132597879392&amp;guid=405655de3c35c7246a1eedd3d7535251&amp;type=3#PlayerInventory" />
-    <ui:VisualElement name="TopNav" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 10%;" />
+    <Style src="project://database/Assets/UI/global.uss?fileID=7433441132597879392&amp;guid=9406623aa48ec8440816738b6d4b2f1c&amp;type=3#global" />
+    <ui:VisualElement name="TopNav" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 10%; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+        <ui:Button text="Back to Main" display-tooltip-when-elided="true" name="BackToMainBtn" class="main-btn" />
+    </ui:VisualElement>
     <ui:VisualElement name="Panels" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 90%; flex-direction: row;">
         <ui:VisualElement name="LeftPanel" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); min-width: 33%; max-width: 33%;">
             <ui:VisualElement name="CharacterLoadout" class="bg-container">

@@ -8,6 +8,7 @@ public class InventoryUI : MonoBehaviour {
     private const float SlotSize = 115f;
 
     private VisualElement _root;
+    private Button _backToMainBtn;
     private VisualElement _equipmentLoadoutSlot1;
     private VisualElement _equipmentLoadoutSlot2;
     private VisualElement _equipmentLoadoutSlot3;
@@ -28,6 +29,7 @@ public class InventoryUI : MonoBehaviour {
 
     private void Awake() {
         SetupRoot();
+        SetupButtons();
         SetupLoadoutDropzones();
         _playerInventorySlots = _root.Q<ScrollView>("InventorySlots");
     }
@@ -41,6 +43,12 @@ public class InventoryUI : MonoBehaviour {
     private void SetupRoot() {
         _root = GetComponent<UIDocument>().rootVisualElement;
         StackItemDragDropHandler.SetRoot(_root);
+    }
+
+    private void SetupButtons() {
+        _backToMainBtn = _root.Q<Button>("BackToMainBtn");
+        _backToMainBtn.RegisterCallback<PointerUpEvent, string>(DocumentNames.HandleNavigationClick,
+            DocumentNames.MAIN_MENU);
     }
 
     private void SetupLoadoutDropzones() {
