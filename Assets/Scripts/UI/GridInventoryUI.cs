@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class GridInventoryUI : MonoBehaviour {
     private VisualElement _root;
     private ScrollView _gridScrollView;
-    private VisualElement[,] _slotGrid;
+    private VisualElement[,] _gridSlots;
     private readonly Color _defaultSlotBgColor = new Color(0, 0, 0, 0.49f);
 
     // grid
@@ -24,6 +25,13 @@ public class GridInventoryUI : MonoBehaviour {
     private int _xIndex = -1, _yIndex = -1, _width, _height;
     private Label _nameLabel;
     private Color _sourceColor;
+    private bool _hasBeenRotated = false;
+    private Color[,] _gridSlotsDragSnapshot;
+    private Color[,] _nextGridSlots;
+
+    // keybinds
+    private PlayerInputActions _playerInputActions;
+
 
     private void Awake() {
         _root = GetComponent<UIDocument>().rootVisualElement;
@@ -33,69 +41,7 @@ public class GridInventoryUI : MonoBehaviour {
             if (!_hasClearedDragSource)
                 ClearDragElementSourceStyles();
 
-            // put drag inventory item's image under the cursor with lowered opacity
-            var mousePos = Input.mousePosition;
-            var mousePosAdj = new Vector2(mousePos.x, Screen.height - mousePos.y);
-            mousePosAdj = RuntimePanelUtils.ScreenToPanel(_root.panel, mousePosAdj);
-
-            _dragElement.style.top =
-                mousePosAdj.y - _dragElement.worldBound.height / 2;
-            _dragElement.style.left =
-                mousePosAdj.x - _dragElement.worldBound.width / 2;
-            _dragElement.style.visibility = Visibility.Visible;
-
-            // check for overlap
-            // const float scale = 0.66f;
-            var adjWidth = _width * SlotSize;
-            var adjHeight = _height * SlotSize;
-            // var rect = new Rect(mousePosAdj.x - adjWidth / 2f, mousePosAdj.y - adjHeight / 2f, adjWidth, adjHeight);
-            
-            // create a Vector2 point that is centered in each of the items squares
-            // mouse position is always the middle of the item
-            // how to generate a Vector2 point that is centered in all of the items squares??
-            
-            // get top-left corner of the rectangle...then you can get all points by
-            var xStart = mousePosAdj.x - adjWidth / 2f;
-            var yStart = mousePosAdj.y - adjHeight / 2f;
-            var points = new List<Vector2>();
-            var rects = new List<Rect>();
-            for (var x = 0; x < _width; x++) {
-                for (var y = 0; y < _height; y++) {
-                    var newX = xStart + (x + 1) * SlotSize / 2f;
-                    var newY = yStart + (y + 1) * SlotSize / 2f;
-                    // points.Add(new Vector2(newX, newY));
-                    rects.Add(new Rect(newX, newY, 1f, 1f));
-                }
-            }
-
-            Debug.Log($"{rects.Count}");
-            var total = 0;
-            // var slotUpdated = false;
-            for (var x = 0; x < _slotGrid.GetLength(0); x++) {
-                for (var y = 0; y < _slotGrid.GetLength(1); y++) {
-                    foreach (var rect in rects) {
-                        if (_slotGrid[x, y].worldBound.Overlaps(rect)) {
-                            // Debug.Log($"{x}, {y}");
-                            total++;
-                            break;
-                        }
-                    }
-
-                    if (total == rects.Count)
-                        break;
-                    // foreach (var point in points) {
-                    //     _slotGrid[x, y].style.backgroundColor = _defaultSlotBgColor;
-                    //     if (!_slotGrid[x, y].worldBound.Contains(point)) continue;
-                    //     _slotGrid[x, y].style.backgroundColor = new Color(0, 255, 0, 0.1f);
-                    //     // slotUpdated = true;
-                    //     Debug.Log($"{x}, {y}");
-                    //     break;
-                    // }
-                }
-                
-                if (total == rects.Count)
-                    break;
-            }
+            UpdateSlotsOnDrag();
         });
         _root.RegisterCallback<PointerUpEvent>(evt => {
             if (!IsDragging) return;
@@ -110,9 +56,23 @@ public class GridInventoryUI : MonoBehaviour {
             _hasClearedDragSource = false;
             _root.Remove(_dragElement);
             _dragElement = null;
+            _gridSlotsDragSnapshot = null;
+            _nextGridSlots = null;
         });
         _gridScrollView = _root.Q<ScrollView>("GridScrollView");
         SetupGridInventory();
+
+        // Keybinds
+        _playerInputActions = new PlayerInputActions();
+        _playerInputActions.Inventory.Enable();
+    }
+
+    private void OnEnable() {
+        _playerInputActions.Inventory.RotateDragItem.performed += RotateDragItem;
+    }
+
+    private void OnDisable() {
+        _playerInputActions.Inventory.RotateDragItem.performed -= RotateDragItem;
     }
 
     private void SetupGridInventory() {
@@ -123,15 +83,15 @@ public class GridInventoryUI : MonoBehaviour {
         contentContainer.style.position = Position.Relative;
 
         // Slot grid & slot visual element creation
-        _slotGrid = new VisualElement[Rows, Cols];
-        for (var x = 0; x < _slotGrid.GetLength(0); x++) {
-            for (var y = 0; y < _slotGrid.GetLength(1); y++) {
+        _gridSlots = new VisualElement[Rows, Cols];
+        for (var x = 0; x < _gridSlots.GetLength(0); x++) {
+            for (var y = 0; y < _gridSlots.GetLength(1); y++) {
                 var gridSlot = new VisualElement {
                     name = "GridSlot"
                 };
                 gridSlot.AddToClassList("grid-slot");
                 contentContainer.Add(gridSlot);
-                _slotGrid[x, y] = gridSlot;
+                _gridSlots[x, y] = gridSlot;
             }
         }
 
@@ -143,23 +103,30 @@ public class GridInventoryUI : MonoBehaviour {
 
         // create absolutely positioned image that is based off of it's grid position
         // image should also be scaled to the size of its width & height using the slot size
-        const float imageScale = 0.75f;
         foreach (var valueTuple in _gridInventory.GetItemPositions()) {
             var image = new Image {
                 name = "ItemImage",
                 sprite = valueTuple.gridItem.Icon,
                 style = {
-                    width = SlotSize * testGridItem.Width * imageScale,
-                    height = SlotSize * testGridItem.Height * imageScale,
+                    width = SlotSize * testGridItem.Width * testGridItem.IconScale,
+                    height = SlotSize * testGridItem.Height * testGridItem.IconScale,
                 }
             };
 
             var nameLabel = new Label {
                 name = "ImageLabel",
-                text = valueTuple.gridItem.ItemName,
+                text = valueTuple.gridItem.ShortName,
                 style = {
                     color = Color.white,
-                    fontSize = 14f,
+                    fontSize = 12f,
+                    paddingTop = 0f,
+                    paddingRight = 0f,
+                    paddingBottom = 0f,
+                    paddingLeft = 0f,
+                    marginTop = 1f,
+                    marginRight = 1f,
+                    marginBottom = 0f,
+                    marginLeft = 0f,
                     position = Position.Absolute,
                     top = 0,
                     right = 0
@@ -182,7 +149,7 @@ public class GridInventoryUI : MonoBehaviour {
             imageContainer.RegisterCallback<PointerDownEvent>(evt => {
                 _dragElement = new VisualElement {
                     style = {
-                        backgroundColor = new Color(0, 0, 255, 0.05f),
+                        // backgroundColor = new Color(0, 0, 255, 0.05f), // DEBUG COLOR
                         visibility = Visibility.Hidden,
                         justifyContent = Justify.Center,
                         alignItems = Align.Center,
@@ -196,8 +163,8 @@ public class GridInventoryUI : MonoBehaviour {
                     name = "DragImage",
                     sprite = valueTuple.gridItem.Icon,
                     style = {
-                        width = SlotSize * testGridItem.Width * imageScale,
-                        height = SlotSize * testGridItem.Height * imageScale,
+                        width = SlotSize * testGridItem.Width * testGridItem.IconScale,
+                        height = SlotSize * testGridItem.Height * testGridItem.IconScale,
                     }
                 };
 
@@ -209,10 +176,11 @@ public class GridInventoryUI : MonoBehaviour {
                 _nameLabel = nameLabel;
                 _dragElement.Add(dragImage);
                 _root.Add(_dragElement);
+                TakeGridSnapshot();
             });
 
-            imageContainer.Add(nameLabel);
             imageContainer.Add(image);
+            imageContainer.Add(nameLabel);
             contentContainer.Add(imageContainer);
             UpdateSlotsStyles(valueTuple.top, valueTuple.left, valueTuple.gridItem.Width, valueTuple.gridItem.Height,
                 valueTuple.gridItem.BgColor);
@@ -220,16 +188,21 @@ public class GridInventoryUI : MonoBehaviour {
     }
 
     private void UpdateSlotsStyles(int xIndex, int yIndex, int width, int height, Color bgColor) {
-        for (var x = xIndex; x < width + xIndex; x++) {
-            for (var y = yIndex; y < height + yIndex; y++) {
-                _slotGrid[x, y].style.backgroundColor = bgColor;
+        for (var x = xIndex; x < height + xIndex; x++) {
+            for (var y = yIndex; y < width + yIndex; y++) {
+                _gridSlots[x, y].style.backgroundColor = new Color(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
             }
         }
     }
 
     private void ClearDragElementSourceStyles() {
         // reset bg color of relevant grid slots
-        UpdateSlotsStyles(_xIndex, _yIndex, _width, _height, _defaultSlotBgColor);
+        // override snapshot
+        for (var x = _xIndex; x < _height + _xIndex; x++) {
+            for (var y = _yIndex; y < _width + _yIndex; y++) {
+                _gridSlotsDragSnapshot[x, y] = new Color(_defaultSlotBgColor.r, _defaultSlotBgColor.g, _defaultSlotBgColor.b, _defaultSlotBgColor.a);
+            }
+        }
 
         // hide item label
         _nameLabel.style.visibility = Visibility.Hidden;
@@ -237,12 +210,122 @@ public class GridInventoryUI : MonoBehaviour {
         _hasClearedDragSource = true;
     }
 
-    private void UpdateHoverSlotStyles(int sourceX, int sourceY) {
-        
-        
-        // 3x3
-        // 
-        
-        // 2x2
+    private void UpdateSlotsOnDrag() {
+        // put drag inventory item's image under the cursor with lowered opacity
+        var mousePos = Input.mousePosition;
+        var mousePosAdj = new Vector2(mousePos.x, Screen.height - mousePos.y);
+        mousePosAdj = RuntimePanelUtils.ScreenToPanel(_root.panel, mousePosAdj);
+
+        _dragElement.style.top = mousePosAdj.y -
+                                 (!_hasBeenRotated
+                                     ? _dragElement.worldBound.height
+                                     : _dragElement.worldBound.width) / 2;
+        _dragElement.style.left = mousePosAdj.x -
+                                  (!_hasBeenRotated
+                                      ? _dragElement.worldBound.width
+                                      : _dragElement.worldBound.height) / 2;
+        _dragElement.style.visibility = Visibility.Visible;
+
+        var adjWidth = _width * SlotSize;
+        var adjHeight = _height * SlotSize;
+
+        // get top-left corner of the rectangle
+        var xStart = mousePosAdj.x - (!_hasBeenRotated ? adjWidth : adjHeight) / 2f;
+        var yStart = mousePosAdj.y - (!_hasBeenRotated ? adjHeight : adjWidth) / 2f;
+
+        // create Vector2 foreach square that makes up the item (total: width * height) and center those points
+        // if cursor is within bounds of grid container then the following applies
+        //  foreach point previously created
+        //   set _nextGridSlots[row, col] styles
+        // run change detection for _gridSlots
+
+        var points = new List<Vector2>();
+        var gridRowCount = _gridSlots.GetLength(0);
+        var gridColCount = _gridSlots.GetLength(1);
+        const float offset = SlotSize / 2f;
+        for (var row = 0; row < _height; row++) {
+            for (var col = 0; col < _width; col++) {
+                var x = xStart + offset + (col * SlotSize);
+                var y = yStart + offset + (row * SlotSize);
+                points.Add(new Vector2(x, y));
+            }
+        }
+
+        // only continue if mouse is within the viewport of the inventories scroll view
+        var inventoryViewport = _gridScrollView.Q("unity-content-viewport");
+        if (!inventoryViewport.worldBound.Contains(mousePosAdj)) return;
+
+        foreach (var point in points) {
+            // get row,col that this point is in
+            var row = -1;
+            var col = -1;
+
+            // if point.x or point.y is outside bounds of viewport, skip to next point
+            if (!inventoryViewport.worldBound.Contains(point)) continue;
+
+            for (var i = 0; i < Math.Max(gridRowCount, gridColCount); i++) {
+                var rect = _gridSlots[Math.Min(i, gridRowCount - 1), Math.Min(i, gridColCount - 1)].worldBound;
+                // check if point.y is in this row
+                if (i < gridRowCount && row == -1 && point.y >= rect.yMin && point.y < rect.yMax) {
+                    row = i;
+                }
+
+                // check if point.x is in this col
+                if (i < gridColCount && col == -1 && point.x >= rect.xMin && point.x < rect.xMax) {
+                    col = i;
+                }
+
+                if (row > -1 && col > -1)
+                    break;
+            }
+
+            if (row > -1 && col > -1)
+                _nextGridSlots[row, col] = new Color(0, 255, 0, 0.05f);
+        }
+
+        GridSlotsChangeDetection();
+    }
+
+    private void RotateDragItem(InputAction.CallbackContext context) {
+        if (!IsDragging) return;
+
+        // rotate image 90deg if it hasn't been rotated; else rotate -90deg
+        _dragElement.style.rotate = !_hasBeenRotated
+            ? new Rotate(new Angle(90f, AngleUnit.Degree))
+            : new Rotate(0f);
+
+        // flip flag
+        _hasBeenRotated = !_hasBeenRotated;
+
+        UpdateSlotsOnDrag();
+    }
+
+    private void GridSlotsChangeDetection() {
+        var gridRowCount = _gridSlots.GetLength(0);
+        var gridColCount = _gridSlots.GetLength(1);
+        for (var x = 0; x < gridRowCount; x++) {
+            for (var y = 0; y < gridColCount; y++) {
+                _gridSlots[x, y].style.backgroundColor = new Color(_nextGridSlots[x, y].r, _nextGridSlots[x, y].g,
+                    _nextGridSlots[x, y].b, _nextGridSlots[x, y].a);
+                _nextGridSlots[x, y] = new Color(_gridSlotsDragSnapshot[x, y].r, _gridSlotsDragSnapshot[x, y].g,
+                    _gridSlotsDragSnapshot[x, y].b, _gridSlotsDragSnapshot[x, y].a); // reset
+            }
+        }
+    }
+
+    private void TakeGridSnapshot() {
+        var gridRowCount = _gridSlots.GetLength(0);
+        var gridColCount = _gridSlots.GetLength(1);
+        _gridSlotsDragSnapshot = new Color[gridRowCount, gridColCount];
+        _nextGridSlots = new Color[gridRowCount, gridColCount];
+        for (var x = 0; x < gridRowCount; x++) {
+            for (var y = 0; y < gridColCount; y++) {
+                _gridSlotsDragSnapshot[x, y] = new Color(_gridSlots[x, y].resolvedStyle.backgroundColor.r,
+                    _gridSlots[x, y].resolvedStyle.backgroundColor.g,
+                    _gridSlots[x, y].resolvedStyle.backgroundColor.b, _gridSlots[x, y].resolvedStyle.backgroundColor.a);
+                _nextGridSlots[x, y] = new Color(_gridSlotsDragSnapshot[x, y].r, _gridSlotsDragSnapshot[x, y].g,
+                    _gridSlotsDragSnapshot[x, y].b, _gridSlotsDragSnapshot[x, y].a); // initialize
+            }
+        }
     }
 }

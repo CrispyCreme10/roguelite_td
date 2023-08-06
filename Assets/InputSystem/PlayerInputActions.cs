@@ -269,6 +269,34 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Inventory"",
+            ""id"": ""341eaea8-1d41-4558-b562-4a354c681cfa"",
+            ""actions"": [
+                {
+                    ""name"": ""Rotate Drag Item"",
+                    ""type"": ""Button"",
+                    ""id"": ""27fdfe48-0bf1-4bd9-96c9-a9fa8d238447"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""542f2cbb-3e45-4dc9-8bbc-be1c574df12f"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Rotate Drag Item"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -310,6 +338,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_PlaceTurret = m_Player.FindAction("Place Turret", throwIfNotFound: true);
         m_Player_DeselectTurret = m_Player.FindAction("Deselect Turret", throwIfNotFound: true);
         m_Player_SelectTurret1 = m_Player.FindAction("Select Turret 1", throwIfNotFound: true);
+        // Inventory
+        m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
+        m_Inventory_RotateDragItem = m_Inventory.FindAction("Rotate Drag Item", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -461,6 +492,52 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Inventory
+    private readonly InputActionMap m_Inventory;
+    private List<IInventoryActions> m_InventoryActionsCallbackInterfaces = new List<IInventoryActions>();
+    private readonly InputAction m_Inventory_RotateDragItem;
+    public struct InventoryActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public InventoryActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @RotateDragItem => m_Wrapper.m_Inventory_RotateDragItem;
+        public InputActionMap Get() { return m_Wrapper.m_Inventory; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InventoryActions set) { return set.Get(); }
+        public void AddCallbacks(IInventoryActions instance)
+        {
+            if (instance == null || m_Wrapper.m_InventoryActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_InventoryActionsCallbackInterfaces.Add(instance);
+            @RotateDragItem.started += instance.OnRotateDragItem;
+            @RotateDragItem.performed += instance.OnRotateDragItem;
+            @RotateDragItem.canceled += instance.OnRotateDragItem;
+        }
+
+        private void UnregisterCallbacks(IInventoryActions instance)
+        {
+            @RotateDragItem.started -= instance.OnRotateDragItem;
+            @RotateDragItem.performed -= instance.OnRotateDragItem;
+            @RotateDragItem.canceled -= instance.OnRotateDragItem;
+        }
+
+        public void RemoveCallbacks(IInventoryActions instance)
+        {
+            if (m_Wrapper.m_InventoryActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IInventoryActions instance)
+        {
+            foreach (var item in m_Wrapper.m_InventoryActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_InventoryActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public InventoryActions @Inventory => new InventoryActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -488,5 +565,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnPlaceTurret(InputAction.CallbackContext context);
         void OnDeselectTurret(InputAction.CallbackContext context);
         void OnSelectTurret1(InputAction.CallbackContext context);
+    }
+    public interface IInventoryActions
+    {
+        void OnRotateDragItem(InputAction.CallbackContext context);
     }
 }

@@ -247,6 +247,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Inventory",
+            "id": "341eaea8-1d41-4558-b562-4a354c681cfa",
+            "actions": [
+                {
+                    "name": "Rotate Drag Item",
+                    "type": "Button",
+                    "id": "27fdfe48-0bf1-4bd9-96c9-a9fa8d238447",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "542f2cbb-3e45-4dc9-8bbc-be1c574df12f",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Rotate Drag Item",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
