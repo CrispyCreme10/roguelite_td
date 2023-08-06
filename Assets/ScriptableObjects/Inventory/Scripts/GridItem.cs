@@ -8,6 +8,7 @@ public class GridItem : ScriptableObject {
     [SerializeField] private int width;
     [SerializeField] private int height;
     [SerializeField] private float iconScale = 1f;
+    [SerializeField] private float iconRotation = 0f; // initial rotation of icon
     [SerializeField] private Color bgColor;
 
     public string ItemName => itemName;
@@ -16,5 +17,6 @@ public class GridItem : ScriptableObject {
     public int Width => width;
     public int Height => height;
     public float IconScale => iconScale;
+    public float IconRotation => iconRotation;
     public Color BgColor => bgColor;
 }

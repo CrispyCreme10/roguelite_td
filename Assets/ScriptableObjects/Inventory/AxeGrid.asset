@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: AxeGrid
   m_EditorClassIdentifier: 
   itemName: Short Axe
-  shortName: Short Axe
+  shortName: 
   icon: {fileID: 21300000, guid: c646d600d1539604a8e82573a3b3233a, type: 3}
   width: 3
   height: 2
   iconScale: 1
+  iconRotation: -120
   bgColor: {r: 0, g: 0, b: 0, a: 0.88235295}
