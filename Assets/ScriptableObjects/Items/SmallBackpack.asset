@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26c02e0135b4486e9bb8fa105e6be4d4, type: 3}
-  m_Name: Backpack
-  m_EditorClassIdentifier: 
+  m_Script: {fileID: 0}
+  m_Name: SmallBackpack
+  m_EditorClassIdentifier: Assembly-CSharp::ContainerItemSO
   description: 
-  itemType: 7
-  icon: {fileID: 21300000, guid: b3ac628e63c18d54fb622a1da7836527, type: 3}
+  itemType: 0
+  icon: {fileID: 0}
   stackSize: 1
+  containerInventory: {fileID: 11400000, guid: b26cbb05997c88d4eb97d753a60cc71d, type: 2}

@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/grid-dragdrop.uss?fileID=7433441132597879392&amp;guid=405dfda92e92e114c8e15b90044e8524&amp;type=3#grid-dragdrop" />
+    <ui:VisualElement name="Root" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; align-items: center; justify-content: center;">
+        <ui:ScrollView name="GridScrollView" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" class="grid-container" style="width: 626px; max-width: 626px; min-width: 626px;" />
+    </ui:VisualElement>
+</ui:UXML>

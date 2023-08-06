@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13f9c336b224dba43929abb99814bbd7, type: 3}
-  m_Name: PlayerBackpack
+  m_Name: SmallBackpackInventory
   m_EditorClassIdentifier: 
   size: 0
   items: []

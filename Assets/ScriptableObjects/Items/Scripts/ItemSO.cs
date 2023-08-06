@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Item")]
 public class ItemSO : ScriptableObject
 {
-    [SerializeField] private string description;
+    [SerializeField] [TextArea] private string description;
     [SerializeField] private ItemType itemType;
     [SerializeField] private Sprite icon;
     [SerializeField] private int stackSize;
@@ -18,6 +18,11 @@ public class ItemSO : ScriptableObject
     public ItemType ItemType => itemType;
 
     public string Description => description;
+}
+
+[CreateAssetMenu(menuName = "Container Item")]
+public class ContainerItemSO : ItemSO {
+    [SerializeField] private InventorySO containerInventory;
 }
 
 public enum ItemType
