@@ -19,4 +19,6 @@ MonoBehaviour:
   height: 2
   iconScale: 1
   iconRotation: -120
+  defaultStackSize: 1
   bgColor: {r: 0, g: 0, b: 0, a: 0.88235295}
+  statColor: {r: 0, g: 0, b: 0, a: 0}
