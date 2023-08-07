@@ -257,33 +257,57 @@ public class GridInventoryUI : MonoBehaviour {
                                       : _dragElement.worldBound.height) / 2;
         _dragElement.style.visibility = Visibility.Visible;
 
-        var adjWidth = _dragGridItem.Width * SlotSize;
-        var adjHeight = _dragGridItem.Height * SlotSize;
+        var totalSlotWidth = _dragGridItem.Width * SlotSize;
+        var totalSlotHeight = _dragGridItem.Height * SlotSize;
 
         // get top-left corner of the rectangle
-        var xStart = mousePosAdj.x - (!_hasBeenRotated ? adjWidth : adjHeight) / 2f;
-        var yStart = mousePosAdj.y - (!_hasBeenRotated ? adjHeight : adjWidth) / 2f;
+        var xStart = mousePosAdj.x - (!_hasBeenRotated ? totalSlotWidth : totalSlotHeight) / 2f;
+        var yStart = mousePosAdj.y - (!_hasBeenRotated ? totalSlotHeight : totalSlotWidth) / 2f;
 
+        // create potential offsets to clamp drag element slot highlight styles to container (viewport of scrollview)
+        var xEnd = xStart + totalSlotWidth;
+        var yEnd = yStart + totalSlotHeight;
+        var inventoryViewport = _gridScrollView.Q("unity-content-viewport");
+
+        var shiftXOffset = 0f;
+        var shiftYOffset = 0f;
+        
+        // point(s) exists outside the right/left of the container
+        if (xEnd > inventoryViewport.worldBound.xMax) {
+            shiftXOffset = inventoryViewport.worldBound.xMax - xEnd; // want negative offset
+        } else if (xStart < inventoryViewport.worldBound.xMin) {
+            shiftXOffset = inventoryViewport.worldBound.xMin - xStart; // want positive offset
+        }
+
+        // point(s) exists outside the bottom/top of the container
+        if (yEnd > inventoryViewport.worldBound.yMax) {
+            shiftYOffset = inventoryViewport.worldBound.yMax - yEnd; // want negative offset
+        } else if (yStart < inventoryViewport.worldBound.yMin) {
+            shiftYOffset = inventoryViewport.worldBound.yMin - yStart; // want positive offset
+        }
+        
         // create Vector2 foreach square that makes up the item (total: width * height) and center those points
         // if cursor is within bounds of grid container then the following applies
         //  foreach point previously created
         //   set _nextGridSlots[row, col] styles
         // run change detection for _gridSlots
-
+        
         var points = new List<Vector2>();
         var gridRowCount = _gridSlots.GetLength(0);
         var gridColCount = _gridSlots.GetLength(1);
+        var rotateAdjHeight = (!_hasBeenRotated ? _dragGridItem.Height : _dragGridItem.Width);
+        var rotateAdjWidth = (!_hasBeenRotated ? _dragGridItem.Width : _dragGridItem.Height);
         const float offset = SlotSize / 2f;
-        for (var row = 0; row < (!_hasBeenRotated ? _dragGridItem.Height : _dragGridItem.Width); row++) {
-            for (var col = 0; col < (!_hasBeenRotated ? _dragGridItem.Width : _dragGridItem.Height); col++) {
-                var x = xStart + offset + (col * SlotSize);
-                var y = yStart + offset + (row * SlotSize);
+        for (var row = 0; row < rotateAdjHeight; row++) {
+            for (var col = 0; col < rotateAdjWidth; col++) {
+                var x = xStart + offset + (col * SlotSize) + shiftXOffset;
+                var y = yStart + offset + (row * SlotSize) + shiftYOffset;
+                
                 points.Add(new Vector2(x, y));
             }
         }
 
         // only continue if mouse is within the viewport of the inventories scroll view
-        var inventoryViewport = _gridScrollView.Q("unity-content-viewport");
         if (inventoryViewport.worldBound.Contains(mousePosAdj)) {
             // validate placement by sending top-left coordinate, item width, & item height to data grid
             for (var p = 0; p < points.Count; p++) {
@@ -291,9 +315,6 @@ public class GridInventoryUI : MonoBehaviour {
                 var row = -1;
                 var col = -1;
                 var point = points[p];
-
-                // if point.x or point.y is outside bounds of viewport, skip to next point
-                if (!inventoryViewport.worldBound.Contains(point)) continue;
 
                 for (var i = 0; i < Math.Max(gridRowCount, gridColCount); i++) {
                     var rect = _gridSlots[Math.Min(i, gridRowCount - 1), Math.Min(i, gridColCount - 1)].worldBound;
@@ -311,7 +332,7 @@ public class GridInventoryUI : MonoBehaviour {
                         break;
                 }
 
-                if (row <= -1 || col <= -1) continue;
+                Debug.Log($"points ({p}): {row}, {col}");
                 if (p == 0) {
                     _isValidPlacement = _gridInventory.CanAddItemAtCoordinate(row, col, _dragGridItem, _hasBeenRotated);
                     if (_isValidPlacement) {
@@ -320,6 +341,7 @@ public class GridInventoryUI : MonoBehaviour {
                     }
                 }
 
+                // dont need to worry about negative indices since _isValidPlacement should rule those out
                 _nextGridSlots[row, col] = _isValidPlacement ? _validDragColor : _invalidDragColor;
             }
         }
