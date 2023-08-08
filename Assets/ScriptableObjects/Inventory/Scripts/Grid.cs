@@ -26,12 +26,12 @@ public class Grid {
         return _gridArray[rowIndex, colIndex];
     }
 
-    public (int, int, int, int) TryAdd(int itemIndex, int itemWidth, int itemHeight) {
+    public (int, int, int, int) TryAdd(int itemKey, int itemWidth, int itemHeight) {
         // look for an open grouping of cells within the grid to place this item
         for (var row = 0; row < _gridArray.GetLength(0); row++) {
             for (var col = 0; col < _gridArray.GetLength(1); col++) {
-                if (!CanAddAtCoordinate(itemIndex, row, col, itemWidth, itemHeight)) continue;
-                Add(itemIndex, row, col, itemWidth, itemHeight);
+                if (!CanAddAtCoordinate(itemKey, row, col, itemWidth, itemHeight)) continue;
+                Add(itemKey, row, col, itemWidth, itemHeight);
                 return (row, col, itemWidth, itemHeight);
             }
         }
@@ -39,16 +39,16 @@ public class Grid {
         return (-1, -1, 0, 0);
     }
 
-    public void AddAtCoordinate(int itemIndex, int rowIndex, int colIndex, int itemWidth, int itemHeight) {
-        Add(itemIndex, rowIndex, colIndex, itemWidth, itemHeight);
+    public void AddAtCoordinate(int itemKey, int rowIndex, int colIndex, int itemWidth, int itemHeight) {
+        Add(itemKey, rowIndex, colIndex, itemWidth, itemHeight);
     }
 
 
-    public bool CanAddAtCoordinate(int itemIndex, int rowIndex, int colIndex, int itemWidth, int itemHeight) {
+    public bool CanAddAtCoordinate(int itemKey, int rowIndex, int colIndex, int itemWidth, int itemHeight) {
         if (rowIndex < 0 || rowIndex + itemHeight > _rows || colIndex < 0 || colIndex + itemWidth > _cols) return false;
         for (var x = rowIndex; x < itemHeight + rowIndex; x++) {
             for (var y = colIndex; y < itemWidth + colIndex; y++) {
-                if (_gridArray[x, y] != -1 && _gridArray[x, y] != itemIndex)
+                if (_gridArray[x, y] != -1 && _gridArray[x, y] != itemKey)
                     return false;
             }
         }
@@ -56,10 +56,10 @@ public class Grid {
         return true;
     }
 
-    private void Add(int itemIndex, int xIndex, int yIndex, int itemWidth, int itemHeight) {
+    private void Add(int itemKey, int xIndex, int yIndex, int itemWidth, int itemHeight) {
         for (var x = xIndex; x < itemHeight + xIndex; x++) {
             for (var y = yIndex; y < itemWidth + yIndex; y++) {
-                _gridArray[x, y] = itemIndex;
+                _gridArray[x, y] = itemKey;
             }
         }
     }
@@ -72,10 +72,10 @@ public class Grid {
         }
     }
 
-    public (int x, int y) GetTopLeftCoordinateForItem(int itemIndex) {
+    public (int x, int y) GetTopLeftCoordinateForItem(int itemKey) {
         for (var x = 0; x < _gridArray.GetLength(0); x++) {
             for (var y = 0; y < _gridArray.GetLength(1); y++) {
-                if (_gridArray[x, y] == itemIndex) {
+                if (_gridArray[x, y] == itemKey) {
                     return (x, y);
                 }
             }
@@ -115,56 +115,56 @@ public class GridInventory {
         stackGridItem.UpdateGridData(rowIndex, colIndex, isRotated);
     }
 
-    public void MoveItem(int rowIndex, int colIndex, int gridItemIndex, bool isRotated) {
-        if (gridItemIndex == -1) return;
+    public void MoveItem(int rowIndex, int colIndex, int gridItemKey, bool isRotated) {
+        if (gridItemKey == -1) return;
         
-        RemoveGridRef(gridItemIndex);
-        AddItemAtCoordinate(rowIndex, colIndex, gridItemIndex, isRotated);
+        RemoveGridRef(gridItemKey);
+        AddItemAtCoordinate(rowIndex, colIndex, gridItemKey, isRotated);
     }
 
-    public void MergeItems(int rowIndex, int colIndex, int gridItemIndex) {
+    public void MergeItems(int rowIndex, int colIndex, int gridItemKey) {
         var itemIndex = _grid.GetIndexAtCoordinate(rowIndex, colIndex);
         if (itemIndex < 0) return;
-        var mergingItem = _gridItems[gridItemIndex];
+        var mergingItem = _gridItems[gridItemKey];
         var squashItem = _gridItems[itemIndex];
         squashItem.IncreaseAmount(mergingItem.Amount);
         // remove item at gridItemIndex
-        RemoveItemAtIndex(gridItemIndex);
+        RemoveItemAtIndex(gridItemKey);
     }
 
     /// <summary>
     /// Remove old ref in grid
     /// </summary>
-    /// <param name="gridItemIndex"></param>
-    private void RemoveGridRef(int gridItemIndex) {
-        _grid.Remove(_gridItems[gridItemIndex].RowIndex, _gridItems[gridItemIndex].ColIndex,
-            _gridItems[gridItemIndex].WidthAdjForRotation, _gridItems[gridItemIndex].HeightAdjForRotation);
+    /// <param name="gridItemKey"></param>
+    private void RemoveGridRef(int gridItemKey) {
+        _grid.Remove(_gridItems[gridItemKey].RowIndex, _gridItems[gridItemKey].ColIndex,
+            _gridItems[gridItemKey].WidthAdjForRotation, _gridItems[gridItemKey].HeightAdjForRotation);
     }
     
-    private void RemoveItemAtIndex(int gridItemIndex) {
-        RemoveGridRef(gridItemIndex);
-        _gridItems.Remove(gridItemIndex);
+    private void RemoveItemAtIndex(int gridItemKey) {
+        RemoveGridRef(gridItemKey);
+        _gridItems.Remove(gridItemKey);
     }
 
-    private void AddItemAtCoordinate(int rowIndex, int colIndex, int gridItemIndex, bool isRotated) {
-        var stackGridItem = _gridItems[gridItemIndex];
+    private void AddItemAtCoordinate(int rowIndex, int colIndex, int gridItemKey, bool isRotated) {
+        var stackGridItem = _gridItems[gridItemKey];
         stackGridItem.UpdateGridData(rowIndex, colIndex, isRotated); // update before add??
-        _grid.AddAtCoordinate(gridItemIndex, rowIndex, colIndex, stackGridItem.WidthAdjForRotation,
+        _grid.AddAtCoordinate(gridItemKey, rowIndex, colIndex, stackGridItem.WidthAdjForRotation,
             stackGridItem.HeightAdjForRotation);
     }
 
-    public (bool, bool) IsValidPlacement(int rowIndex, int colIndex, int gridItemIndex, bool isRotated) {
-        var stackGridItem = _gridItems[gridItemIndex];
+    public (bool, bool) IsValidPlacement(int rowIndex, int colIndex, int gridItemKey, bool isRotated) {
+        var stackGridItem = _gridItems[gridItemKey];
         if (IsSameCoordinate(rowIndex, colIndex, stackGridItem) && !isRotated)
             return (false, false);
         
         // only 1x1 items have the option to merge; can then be further overridden metadata
         var canMerge = false;
         if (stackGridItem.GridItem.Width == 1 && stackGridItem.GridItem.Height == 1) {
-            canMerge = CanMergeWithItemAtCoordinate(rowIndex, colIndex, gridItemIndex);
+            canMerge = CanMergeWithItemAtCoordinate(rowIndex, colIndex, gridItemKey);
         }
 
-        return (canMerge, CanAddItemAtCoordinate(rowIndex, colIndex, gridItemIndex, isRotated));
+        return (canMerge, CanAddItemAtCoordinate(rowIndex, colIndex, gridItemKey, isRotated));
     }
 
     private bool CanMergeWithItemAtCoordinate(int rowIndex, int colIndex, int gridItemIndex) {
@@ -174,12 +174,12 @@ public class GridInventory {
         return _gridItems[indexAtCoordinate].CanMerge(stackGridItem);
     }
 
-    private bool CanAddItemAtCoordinate(int rowIndex, int colIndex, int gridItemIndex, bool isRotated) {
+    private bool CanAddItemAtCoordinate(int rowIndex, int colIndex, int gridItemKey, bool isRotated) {
         // handle being in the same spot as the GridItem's origin
-        var stackGridItem = _gridItems[gridItemIndex];
+        var stackGridItem = _gridItems[gridItemKey];
         if (IsSameCoordinate(rowIndex, colIndex, stackGridItem) && !isRotated)
             return false;
-        return gridItemIndex != -1 && _grid.CanAddAtCoordinate(gridItemIndex, rowIndex, colIndex,
+        return gridItemKey != -1 && _grid.CanAddAtCoordinate(gridItemKey, rowIndex, colIndex,
             !isRotated ? stackGridItem.GridItem.Width : stackGridItem.GridItem.Height,
             !isRotated ? stackGridItem.GridItem.Height : stackGridItem.GridItem.Width);
     }
@@ -190,10 +190,10 @@ public class GridInventory {
 
     public List<(int gridItemIndex, StackGridItem stackGridItem, int top, int left)> GetItemPositions() {
         var list = new List<(int gridItemIndex, StackGridItem stackGridItem, int top, int left)>();
-        for (var i = 0; i < _gridItems.Count; i++) {
-            var stackGridItem = _gridItems[i];
-            var pos = _grid.GetTopLeftCoordinateForItem(i);
-            list.Add((i, stackGridItem, pos.x, pos.y));
+        foreach(var key in _gridItems.Keys) {
+            var stackGridItem = _gridItems[key];
+            var pos = _grid.GetTopLeftCoordinateForItem(key);
+            list.Add((key, stackGridItem, pos.x, pos.y));
         }
 
         return list;

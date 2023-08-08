@@ -33,6 +33,7 @@ public class GridInventoryUI : MonoBehaviour {
     private StackGridItem _dragStackGridItem;
     private int _dragGridItemIndex = -1;
     private Label _nameLabel;
+    private Label _statLabel;
     private Color _sourceColor;
     private bool _isRotatedFromUserInput;
     private Color[,] _gridSlotsDragSnapshot;
@@ -105,7 +106,11 @@ public class GridInventoryUI : MonoBehaviour {
         // Visual Elements
         _gridScrollView = _root.Q<ScrollView>("GridScrollView");
         _inventoryViewport = _gridScrollView.Q("unity-content-viewport");
-
+        _contentContainer = _gridScrollView.Q<VisualElement>("unity-content-container");
+        _contentContainer.style.flexDirection = FlexDirection.Row;
+        _contentContainer.style.flexWrap = Wrap.Wrap;
+        _contentContainer.style.position = Position.Relative;
+        
         SetupGridInventory();
         PaintGridInventory();
 
@@ -134,12 +139,6 @@ public class GridInventoryUI : MonoBehaviour {
     }
 
     private void PaintGridInventory() {
-        // UI Toolkit Stuff
-        _contentContainer = _gridScrollView.Q<VisualElement>("unity-content-container");
-        _contentContainer.style.flexDirection = FlexDirection.Row;
-        _contentContainer.style.flexWrap = Wrap.Wrap;
-        _contentContainer.style.position = Position.Relative;
-
         // Slot grid & slot visual element creation
         _gridSlots = new VisualElement[Rows, Cols];
         for (var x = 0; x < _gridSlots.GetLength(0); x++) {
@@ -208,8 +207,9 @@ public class GridInventoryUI : MonoBehaviour {
             };
             itemContainer.Add(nameLabel);
 
+            Label statLabel = null;
             if (valueTuple.stackGridItem.Amount > 1) {
-                var statLabel = new Label {
+                statLabel = new Label {
                     name = "StatLabel",
                     text = valueTuple.stackGridItem.Amount.ToString(),
                     style = {
@@ -264,6 +264,7 @@ public class GridInventoryUI : MonoBehaviour {
                     valueTuple.stackGridItem.GridItem.BgColor.g,
                     valueTuple.stackGridItem.GridItem.BgColor.b, valueTuple.stackGridItem.GridItem.BgColor.a);
                 _nameLabel = nameLabel;
+                _statLabel = statLabel;
                 _isRotatedFromUserInput = valueTuple.stackGridItem.IsRotated;
                 _dragElement.Add(dragImage);
                 _root.Add(_dragElement);
@@ -296,6 +297,11 @@ public class GridInventoryUI : MonoBehaviour {
 
         // hide item label
         _nameLabel.style.visibility = Visibility.Hidden;
+        
+        // hide stat label
+        if (_statLabel != null) {
+            _statLabel.style.visibility = Visibility.Hidden;
+        }
 
         _hasClearedDragSource = true;
     }
@@ -307,11 +313,11 @@ public class GridInventoryUI : MonoBehaviour {
         mousePosAdj = RuntimePanelUtils.ScreenToPanel(_root.panel, mousePosAdj);
 
         _dragElement.style.top = mousePosAdj.y -
-                                 (!_isRotatedFromUserInput
+                                 (!(_isRotatedFromUserInput ^ _dragStackGridItem.IsRotated)
                                      ? _dragElement.worldBound.height
                                      : _dragElement.worldBound.width) / 2;
         _dragElement.style.left = mousePosAdj.x -
-                                  (!_isRotatedFromUserInput
+                                  (!(_isRotatedFromUserInput ^ _dragStackGridItem.IsRotated)
                                       ? _dragElement.worldBound.width
                                       : _dragElement.worldBound.height) / 2;
         _dragElement.style.visibility = Visibility.Visible;
