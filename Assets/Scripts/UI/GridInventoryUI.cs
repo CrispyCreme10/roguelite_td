@@ -265,7 +265,6 @@ public class GridInventoryUI : MonoBehaviour {
                     valueTuple.stackGridItem.GridItem.BgColor.b, valueTuple.stackGridItem.GridItem.BgColor.a);
                 _nameLabel = nameLabel;
                 _statLabel = statLabel;
-                _isRotatedFromUserInput = valueTuple.stackGridItem.IsRotated;
                 _dragElement.Add(dragImage);
                 _root.Add(_dragElement);
                 TakeGridSnapshot();
@@ -312,20 +311,22 @@ public class GridInventoryUI : MonoBehaviour {
         var mousePosAdj = new Vector2(mousePos.x, Screen.height - mousePos.y);
         mousePosAdj = RuntimePanelUtils.ScreenToPanel(_root.panel, mousePosAdj);
 
+        var isRotated = _isRotatedFromUserInput ^ _dragStackGridItem.IsRotated;
+        
         _dragElement.style.top = mousePosAdj.y -
-                                 (!(_isRotatedFromUserInput ^ _dragStackGridItem.IsRotated)
+                                 (!isRotated
                                      ? _dragElement.worldBound.height
                                      : _dragElement.worldBound.width) / 2;
         _dragElement.style.left = mousePosAdj.x -
-                                  (!(_isRotatedFromUserInput ^ _dragStackGridItem.IsRotated)
+                                  (!isRotated
                                       ? _dragElement.worldBound.width
                                       : _dragElement.worldBound.height) / 2;
         _dragElement.style.visibility = Visibility.Visible;
 
         var rotateAdjHeight =
-            (!_isRotatedFromUserInput ? _dragStackGridItem.GridItem.Height : _dragStackGridItem.GridItem.Width);
+            (!isRotated ? _dragStackGridItem.GridItem.Height : _dragStackGridItem.GridItem.Width);
         var rotateAdjWidth =
-            (!_isRotatedFromUserInput ? _dragStackGridItem.GridItem.Width : _dragStackGridItem.GridItem.Height);
+            (!isRotated ? _dragStackGridItem.GridItem.Width : _dragStackGridItem.GridItem.Height);
         
         var totalSlotWidth = rotateAdjWidth * SlotSize;
         var totalSlotHeight = rotateAdjHeight * SlotSize;
@@ -424,14 +425,14 @@ public class GridInventoryUI : MonoBehaviour {
     private void RotateDragItem(InputAction.CallbackContext context) {
         if (!IsDragging) return;
 
-        // rotate image based on UI rotation (user action) and its stored rotation (StackGridItem -> IsRotated)
-        _dragElement.style.rotate = !_isRotatedFromUserInput
-            ? new Rotate(new Angle(!_dragStackGridItem.IsRotated ? 90f : -90f, AngleUnit.Degree))
-            : new Rotate(0f);
-
         // flip flag
         _isRotatedFromUserInput = !_isRotatedFromUserInput;
-
+        
+        // rotate image based on UI rotation (user action) and its stored rotation (StackGridItem -> IsRotated)
+        _dragElement.style.rotate = _isRotatedFromUserInput
+            ? new Rotate(new Angle(!_dragStackGridItem.IsRotated ? 90f : -90f, AngleUnit.Degree))
+            : new Rotate(0f);
+        
         UpdateSlotsOnDrag();
     }
 
@@ -464,26 +465,8 @@ public class GridInventoryUI : MonoBehaviour {
         }
     }
 
-    private void RefreshGridSlotsFromSource() {
-        var gridRowCount = _gridSlots.GetLength(0);
-        var gridColCount = _gridSlots.GetLength(1);
-        for (var row = 0; row < gridRowCount; row++) {
-            for (var col = 0; col < gridColCount; col++) {
-                _gridSlots[row, col].style.backgroundColor = _defaultSlotBgColor;
-            }
-        }
-
-        foreach (var valueTuple in _gridInventory.GetItemPositions()) {
-            UpdateSlotsStyles(valueTuple.top, valueTuple.left, valueTuple.stackGridItem.GridItem.Width,
-                valueTuple.stackGridItem.GridItem.Height,
-                valueTuple.stackGridItem.GridItem.BgColor);
-        }
-    }
-
     private void RepaintGridInventory() {
-        var contentContainer = _gridScrollView.Q<VisualElement>("unity-content-container");
-        contentContainer.Clear();
-
+        _contentContainer.Clear();
         PaintGridInventory();
     }
 }
