@@ -11,7 +11,10 @@ public class GridInventoryUI : MonoBehaviour {
     private VisualElement _inventoryViewport;
     private VisualElement _contentContainer;
     private VisualElement[,] _gridSlots;
+    private Label _itemNameTooltip;
+    private Vector2 _mousePosAdj;
     private readonly Color _defaultSlotBgColor = new Color(0, 0, 0, 0.49f);
+    private readonly Color _hoverSlotBgColor = new Color(96, 96, 95, 0.05f);
 
     // grid
     private GridInventory _gridInventory;
@@ -53,6 +56,23 @@ public class GridInventoryUI : MonoBehaviour {
             if (!_hasClearedDragSource)
                 ClearDragElementSourceStyles();
 
+            // keep!!
+            SetMousePosAdj();
+            
+            // update drag element
+            _dragElement.style.top = _mousePosAdj.y -
+                                     (!_isRotatedFromUserInput
+                                         ? _dragElement.worldBound.height
+                                         : _dragElement.worldBound.width) / 2;
+            _dragElement.style.left = _mousePosAdj.x -
+                                      (!_isRotatedFromUserInput
+                                          ? _dragElement.worldBound.width
+                                          : _dragElement.worldBound.height) / 2;
+            _dragElement.style.visibility = Visibility.Visible;
+            
+            // update tooltip
+            SetNameTooltipPosition();
+            
             UpdateSlotsOnDrag();
         });
 
@@ -60,11 +80,7 @@ public class GridInventoryUI : MonoBehaviour {
         _root.RegisterCallback<PointerUpEvent>(evt => {
             if (!IsDragging || evt.button != 0) return;
 
-            var mousePos = Input.mousePosition;
-            var mousePosAdj = new Vector2(mousePos.x, Screen.height - mousePos.y);
-            mousePosAdj = RuntimePanelUtils.ScreenToPanel(_root.panel, mousePosAdj);
-
-            if (_isValidPlacement && _inventoryViewport.worldBound.Contains(mousePosAdj)) {
+            if (_isValidPlacement && _inventoryViewport.worldBound.Contains(_mousePosAdj)) {
                 if (!_isMerge)
                     _gridInventory.MoveItem(_newRowIndex, _newColIndex, _dragGridItemIndex, _isRotatedFromUserInput);
                 else
@@ -73,8 +89,8 @@ public class GridInventoryUI : MonoBehaviour {
                 // update _nextGridSlots with new grid
                 RepaintGridInventory();
             } else {
-                for (var x = _xIndex; x < _dragStackGridItem.GridItem.Height + _xIndex; x++) {
-                    for (var y = _yIndex; y < _dragStackGridItem.GridItem.Width + _yIndex; y++) {
+                for (var x = _xIndex; x < _dragStackGridItem.HeightAdjForRotation + _xIndex; x++) {
+                    for (var y = _yIndex; y < _dragStackGridItem.WidthAdjForRotation + _yIndex; y++) {
                         _nextGridSlots[x, y] =
                             new Color(_sourceColor.r, _sourceColor.g, _sourceColor.b, _sourceColor.a);
                     }
@@ -102,7 +118,7 @@ public class GridInventoryUI : MonoBehaviour {
             _isValidPlacement = false;
             _isMerge = false;
         });
-        
+
         // Visual Elements
         _gridScrollView = _root.Q<ScrollView>("GridScrollView");
         _inventoryViewport = _gridScrollView.Q("unity-content-viewport");
@@ -110,6 +126,7 @@ public class GridInventoryUI : MonoBehaviour {
         _contentContainer.style.flexDirection = FlexDirection.Row;
         _contentContainer.style.flexWrap = Wrap.Wrap;
         _contentContainer.style.position = Position.Relative;
+        SetupNameTooltip();
         
         SetupGridInventory();
         PaintGridInventory();
@@ -127,6 +144,12 @@ public class GridInventoryUI : MonoBehaviour {
         _playerInputActions.Inventory.RotateDragItem.performed -= RotateDragItem;
     }
 
+    private void SetMousePosAdj() {
+        var mousePos = Input.mousePosition;
+        var mousePosAdj = new Vector2(mousePos.x, Screen.height - mousePos.y);
+        _mousePosAdj = RuntimePanelUtils.ScreenToPanel(_root.panel, mousePosAdj);
+    }
+    
     private void SetupGridInventory() {
         // Test Grid Inventory Stuff
         _gridInventory = new GridInventory();
@@ -138,6 +161,14 @@ public class GridInventoryUI : MonoBehaviour {
         }
     }
 
+    private void SetupNameTooltip() {
+        _itemNameTooltip = new Label {
+            name = "ItemNameTooltip"
+        };
+        _itemNameTooltip.AddToClassList("item-name-tooltip");
+        _root.Add(_itemNameTooltip);
+    }
+    
     private void PaintGridInventory() {
         // Slot grid & slot visual element creation
         _gridSlots = new VisualElement[Rows, Cols];
@@ -178,10 +209,11 @@ public class GridInventoryUI : MonoBehaviour {
             var image = new Image {
                 name = "ItemImage",
                 sprite = valueTuple.stackGridItem.GridItem.Icon,
+                pickingMode = PickingMode.Ignore,
                 style = {
                     rotate = imageRotation,
-                    width = itemWidth * valueTuple.stackGridItem.GridItem.IconScale,
-                    height = itemHeight * valueTuple.stackGridItem.GridItem.IconScale,
+                    scale = new Vector2(valueTuple.stackGridItem.GridItem.IconScale,
+                        valueTuple.stackGridItem.GridItem.IconScale)
                 }
             };
             itemContainer.Add(image);
@@ -233,7 +265,7 @@ public class GridInventoryUI : MonoBehaviour {
 
             itemContainer.RegisterCallback<PointerDownEvent>(evt => {
                 if (evt.button != 0) return;
-                
+
                 _dragElement = new VisualElement {
                     style = {
                         // backgroundColor = new Color(0, 0, 255, 0.05f), // DEBUG COLOR
@@ -269,6 +301,24 @@ public class GridInventoryUI : MonoBehaviour {
                 _root.Add(_dragElement);
                 TakeGridSnapshot();
             });
+            
+            itemContainer.RegisterCallback<PointerEnterEvent>(evt => {
+                // highlight grid slots
+                UpdateSlotsStyles(valueTuple.top, valueTuple.left, valueTuple.stackGridItem.WidthAdjForRotation,
+                    valueTuple.stackGridItem.HeightAdjForRotation, _hoverSlotBgColor);
+                
+                // show item name tooltip after 500ms delay
+                ShowNameTooltip(valueTuple.stackGridItem.GridItem.ItemName);
+            });
+            
+            itemContainer.RegisterCallback<PointerLeaveEvent>(evt => {
+                // unhighlight grid slots
+                UpdateSlotsStyles(valueTuple.top, valueTuple.left, valueTuple.stackGridItem.WidthAdjForRotation,
+                    valueTuple.stackGridItem.HeightAdjForRotation, valueTuple.stackGridItem.GridItem.BgColor);
+                
+                // hide item name tooltip
+                HideNameTooltip();
+            });
 
             _contentContainer.Add(itemContainer);
             UpdateSlotsStyles(valueTuple.top, valueTuple.left, valueTuple.stackGridItem.WidthAdjForRotation,
@@ -296,7 +346,7 @@ public class GridInventoryUI : MonoBehaviour {
 
         // hide item label
         _nameLabel.style.visibility = Visibility.Hidden;
-        
+
         // hide stat label
         if (_statLabel != null) {
             _statLabel.style.visibility = Visibility.Hidden;
@@ -306,34 +356,18 @@ public class GridInventoryUI : MonoBehaviour {
     }
 
     private void UpdateSlotsOnDrag() {
-        // put drag inventory item's image under the cursor with lowered opacity
-        var mousePos = Input.mousePosition;
-        var mousePosAdj = new Vector2(mousePos.x, Screen.height - mousePos.y);
-        mousePosAdj = RuntimePanelUtils.ScreenToPanel(_root.panel, mousePosAdj);
-
         var isRotated = _isRotatedFromUserInput ^ _dragStackGridItem.IsRotated;
-        
-        _dragElement.style.top = mousePosAdj.y -
-                                 (!isRotated
-                                     ? _dragElement.worldBound.height
-                                     : _dragElement.worldBound.width) / 2;
-        _dragElement.style.left = mousePosAdj.x -
-                                  (!isRotated
-                                      ? _dragElement.worldBound.width
-                                      : _dragElement.worldBound.height) / 2;
-        _dragElement.style.visibility = Visibility.Visible;
-
         var rotateAdjHeight =
             (!isRotated ? _dragStackGridItem.GridItem.Height : _dragStackGridItem.GridItem.Width);
         var rotateAdjWidth =
             (!isRotated ? _dragStackGridItem.GridItem.Width : _dragStackGridItem.GridItem.Height);
-        
+
         var totalSlotWidth = rotateAdjWidth * SlotSize;
         var totalSlotHeight = rotateAdjHeight * SlotSize;
 
         // get top-left corner of the rectangle
-        var xStart = mousePosAdj.x - totalSlotWidth / 2f;
-        var yStart = mousePosAdj.y - totalSlotHeight / 2f;
+        var xStart = _mousePosAdj.x - totalSlotWidth / 2f;
+        var yStart = _mousePosAdj.y - totalSlotHeight / 2f;
 
         // create potential offsets to clamp drag element slot highlight styles to container (viewport of scrollview)
         var xEnd = xStart + totalSlotWidth;
@@ -370,13 +404,13 @@ public class GridInventoryUI : MonoBehaviour {
                 var x = xStart + offset + (col * SlotSize) + shiftXOffset;
                 var y = yStart + offset + (row * SlotSize) + shiftYOffset;
                 var point = new Vector2(x, y);
-                
+
                 points.Add(point);
             }
         }
 
         // only continue if mouse is within the viewport of the inventories scroll view
-        if (_inventoryViewport.worldBound.Contains(mousePosAdj)) {
+        if (_inventoryViewport.worldBound.Contains(_mousePosAdj)) {
             // validate placement by sending top-left coordinate, item width, & item height to data grid
             for (var p = 0; p < points.Count; p++) {
                 // get row,col that this point is in
@@ -427,12 +461,12 @@ public class GridInventoryUI : MonoBehaviour {
 
         // flip flag
         _isRotatedFromUserInput = !_isRotatedFromUserInput;
-        
+
         // rotate image based on UI rotation (user action) and its stored rotation (StackGridItem -> IsRotated)
         _dragElement.style.rotate = _isRotatedFromUserInput
             ? new Rotate(new Angle(!_dragStackGridItem.IsRotated ? 90f : -90f, AngleUnit.Degree))
             : new Rotate(0f);
-        
+
         UpdateSlotsOnDrag();
     }
 
@@ -468,5 +502,22 @@ public class GridInventoryUI : MonoBehaviour {
     private void RepaintGridInventory() {
         _contentContainer.Clear();
         PaintGridInventory();
+    }
+
+    private void ShowNameTooltip(string itemName) {
+        _itemNameTooltip.text = itemName;
+        _itemNameTooltip.style.visibility = Visibility.Visible;
+        SetNameTooltipPosition();
+    }
+
+    private void SetNameTooltipPosition() {
+        _itemNameTooltip.style.top = _mousePosAdj.y - 80;
+        _itemNameTooltip.style.left = _mousePosAdj.x;
+        _itemNameTooltip.style.visibility = Visibility.Visible;
+    }
+
+    private void HideNameTooltip() {
+        _itemNameTooltip.text = "";
+        _itemNameTooltip.style.visibility = Visibility.Hidden;
     }
 }

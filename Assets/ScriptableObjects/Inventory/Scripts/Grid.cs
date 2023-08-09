@@ -117,7 +117,7 @@ public class GridInventory {
 
     public void MoveItem(int rowIndex, int colIndex, int gridItemKey, bool isRotated) {
         if (gridItemKey == -1) return;
-        
+
         RemoveGridRef(gridItemKey);
         AddItemAtCoordinate(rowIndex, colIndex, gridItemKey, isRotated);
     }
@@ -140,7 +140,7 @@ public class GridInventory {
         _grid.Remove(_gridItems[gridItemKey].RowIndex, _gridItems[gridItemKey].ColIndex,
             _gridItems[gridItemKey].WidthAdjForRotation, _gridItems[gridItemKey].HeightAdjForRotation);
     }
-    
+
     private void RemoveItemAtIndex(int gridItemKey) {
         RemoveGridRef(gridItemKey);
         _gridItems.Remove(gridItemKey);
@@ -148,23 +148,25 @@ public class GridInventory {
 
     private void AddItemAtCoordinate(int rowIndex, int colIndex, int gridItemKey, bool isRotated) {
         var stackGridItem = _gridItems[gridItemKey];
-        stackGridItem.UpdateGridData(rowIndex, colIndex, isRotated); // update before add??
+        // isRotated is only true if 1 of the 2 rotate vals are true (XOR)
+        stackGridItem.UpdateGridData(rowIndex, colIndex, isRotated ^ stackGridItem.IsRotated);
         _grid.AddAtCoordinate(gridItemKey, rowIndex, colIndex, stackGridItem.WidthAdjForRotation,
             stackGridItem.HeightAdjForRotation);
     }
 
-    public (bool, bool) IsValidPlacement(int rowIndex, int colIndex, int gridItemKey, bool isRotated) {
+    public (bool, bool) IsValidPlacement(int rowIndex, int colIndex, int gridItemKey, bool isRotatedFromUser) {
         var stackGridItem = _gridItems[gridItemKey];
-        if (IsSameCoordinate(rowIndex, colIndex, stackGridItem) && !isRotated)
+        if (IsSameCoordinate(rowIndex, colIndex, stackGridItem) && !isRotatedFromUser)
             return (false, false);
-        
+
         // only 1x1 items have the option to merge; can then be further overridden metadata
         var canMerge = false;
         if (stackGridItem.GridItem.Width == 1 && stackGridItem.GridItem.Height == 1) {
             canMerge = CanMergeWithItemAtCoordinate(rowIndex, colIndex, gridItemKey);
         }
 
-        return (canMerge, CanAddItemAtCoordinate(rowIndex, colIndex, gridItemKey, isRotated));
+        return (canMerge,
+            CanAddItemAtCoordinate(rowIndex, colIndex, gridItemKey, isRotatedFromUser ^ stackGridItem.IsRotated));
     }
 
     private bool CanMergeWithItemAtCoordinate(int rowIndex, int colIndex, int gridItemIndex) {
@@ -190,7 +192,7 @@ public class GridInventory {
 
     public List<(int gridItemIndex, StackGridItem stackGridItem, int top, int left)> GetItemPositions() {
         var list = new List<(int gridItemIndex, StackGridItem stackGridItem, int top, int left)>();
-        foreach(var key in _gridItems.Keys) {
+        foreach (var key in _gridItems.Keys) {
             var stackGridItem = _gridItems[key];
             var pos = _grid.GetTopLeftCoordinateForItem(key);
             list.Add((key, stackGridItem, pos.x, pos.y));
