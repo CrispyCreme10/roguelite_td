@@ -53,5 +53,6 @@
     transition-property: visibility;
     transition-duration: 0.5s;
     transition-delay: 0.5s;
-    visibility: hidden;
+    visibility: visible;
+    display: none;
 }

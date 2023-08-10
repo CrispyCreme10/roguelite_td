@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -13,6 +14,7 @@ public class GridInventoryUI : MonoBehaviour {
     private VisualElement[,] _gridSlots;
     private Label _itemNameTooltip;
     private Vector2 _mousePosAdj;
+    private bool _isHover;
     private readonly Color _defaultSlotBgColor = new Color(0, 0, 0, 0.49f);
     private readonly Color _hoverSlotBgColor = new Color(96, 96, 95, 0.05f);
 
@@ -51,14 +53,18 @@ public class GridInventoryUI : MonoBehaviour {
         _root = GetComponent<UIDocument>().rootVisualElement;
         // POINTER MOVE EVENT
         _root.RegisterCallback<PointerMoveEvent>(evt => {
+            // keep!!
+            SetMousePosAdj();
+            
+            // update tooltip
+            if (_isHover)
+                SetNameTooltipPosition();
+            
             if (!IsDragging) return;
 
             if (!_hasClearedDragSource)
                 ClearDragElementSourceStyles();
 
-            // keep!!
-            SetMousePosAdj();
-            
             // update drag element
             _dragElement.style.top = _mousePosAdj.y -
                                      (!_isRotatedFromUserInput
@@ -69,10 +75,7 @@ public class GridInventoryUI : MonoBehaviour {
                                           ? _dragElement.worldBound.width
                                           : _dragElement.worldBound.height) / 2;
             _dragElement.style.visibility = Visibility.Visible;
-            
-            // update tooltip
-            SetNameTooltipPosition();
-            
+
             UpdateSlotsOnDrag();
         });
 
@@ -161,14 +164,6 @@ public class GridInventoryUI : MonoBehaviour {
         }
     }
 
-    private void SetupNameTooltip() {
-        _itemNameTooltip = new Label {
-            name = "ItemNameTooltip"
-        };
-        _itemNameTooltip.AddToClassList("item-name-tooltip");
-        _root.Add(_itemNameTooltip);
-    }
-    
     private void PaintGridInventory() {
         // Slot grid & slot visual element creation
         _gridSlots = new VisualElement[Rows, Cols];
@@ -303,6 +298,8 @@ public class GridInventoryUI : MonoBehaviour {
             });
             
             itemContainer.RegisterCallback<PointerEnterEvent>(evt => {
+                _isHover = true;
+                
                 // highlight grid slots
                 UpdateSlotsStyles(valueTuple.top, valueTuple.left, valueTuple.stackGridItem.WidthAdjForRotation,
                     valueTuple.stackGridItem.HeightAdjForRotation, _hoverSlotBgColor);
@@ -312,6 +309,8 @@ public class GridInventoryUI : MonoBehaviour {
             });
             
             itemContainer.RegisterCallback<PointerLeaveEvent>(evt => {
+                _isHover = false;
+                
                 // unhighlight grid slots
                 UpdateSlotsStyles(valueTuple.top, valueTuple.left, valueTuple.stackGridItem.WidthAdjForRotation,
                     valueTuple.stackGridItem.HeightAdjForRotation, valueTuple.stackGridItem.GridItem.BgColor);
@@ -504,20 +503,27 @@ public class GridInventoryUI : MonoBehaviour {
         PaintGridInventory();
     }
 
+    private void SetupNameTooltip() {
+        _itemNameTooltip = new Label {
+            name = "ItemNameTooltip"
+        };
+        _itemNameTooltip.AddToClassList("item-name-tooltip");
+        _root.Add(_itemNameTooltip);
+    }
+    
     private void ShowNameTooltip(string itemName) {
         _itemNameTooltip.text = itemName;
-        _itemNameTooltip.style.visibility = Visibility.Visible;
+        _itemNameTooltip.style.display = DisplayStyle.Flex;
         SetNameTooltipPosition();
     }
 
     private void SetNameTooltipPosition() {
-        _itemNameTooltip.style.top = _mousePosAdj.y - 80;
-        _itemNameTooltip.style.left = _mousePosAdj.x;
-        _itemNameTooltip.style.visibility = Visibility.Visible;
+        _itemNameTooltip.style.top = _mousePosAdj.y - 35;
+        _itemNameTooltip.style.left = _mousePosAdj.x + 5;
     }
 
     private void HideNameTooltip() {
         _itemNameTooltip.text = "";
-        _itemNameTooltip.style.visibility = Visibility.Hidden;
+        _itemNameTooltip.style.display = DisplayStyle.None;
     }
 }
