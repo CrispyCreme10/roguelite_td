@@ -160,7 +160,7 @@ public class GridInventoryUI : MonoBehaviour {
             var newItem = testGridItem.ItemName == "Gold"
                 ? new StackGridItem(testGridItem, 5_000)
                 : new StackGridItem(testGridItem, 1);
-            _gridInventory.TryAddItem(newItem);
+            _gridInventory.TryAddItem(newItem, false);
         }
     }
 
