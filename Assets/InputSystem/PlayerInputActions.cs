@@ -282,6 +282,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Split Drag Item"",
+                    ""type"": ""Button"",
+                    ""id"": ""c879e9ba-7a44-439d-adf2-fdee371ce22a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -293,6 +302,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Rotate Drag Item"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1e62b5f-ed03-4237-9866-3fe1ca611db7"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Split Drag Item"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -341,6 +361,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_RotateDragItem = m_Inventory.FindAction("Rotate Drag Item", throwIfNotFound: true);
+        m_Inventory_SplitDragItem = m_Inventory.FindAction("Split Drag Item", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -497,11 +518,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Inventory;
     private List<IInventoryActions> m_InventoryActionsCallbackInterfaces = new List<IInventoryActions>();
     private readonly InputAction m_Inventory_RotateDragItem;
+    private readonly InputAction m_Inventory_SplitDragItem;
     public struct InventoryActions
     {
         private @PlayerInputActions m_Wrapper;
         public InventoryActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @RotateDragItem => m_Wrapper.m_Inventory_RotateDragItem;
+        public InputAction @SplitDragItem => m_Wrapper.m_Inventory_SplitDragItem;
         public InputActionMap Get() { return m_Wrapper.m_Inventory; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -514,6 +537,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @RotateDragItem.started += instance.OnRotateDragItem;
             @RotateDragItem.performed += instance.OnRotateDragItem;
             @RotateDragItem.canceled += instance.OnRotateDragItem;
+            @SplitDragItem.started += instance.OnSplitDragItem;
+            @SplitDragItem.performed += instance.OnSplitDragItem;
+            @SplitDragItem.canceled += instance.OnSplitDragItem;
         }
 
         private void UnregisterCallbacks(IInventoryActions instance)
@@ -521,6 +547,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @RotateDragItem.started -= instance.OnRotateDragItem;
             @RotateDragItem.performed -= instance.OnRotateDragItem;
             @RotateDragItem.canceled -= instance.OnRotateDragItem;
+            @SplitDragItem.started -= instance.OnSplitDragItem;
+            @SplitDragItem.performed -= instance.OnSplitDragItem;
+            @SplitDragItem.canceled -= instance.OnSplitDragItem;
         }
 
         public void RemoveCallbacks(IInventoryActions instance)
@@ -569,5 +598,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     public interface IInventoryActions
     {
         void OnRotateDragItem(InputAction.CallbackContext context);
+        void OnSplitDragItem(InputAction.CallbackContext context);
     }
 }

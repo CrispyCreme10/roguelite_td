@@ -260,6 +260,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Split Drag Item",
+                    "type": "Button",
+                    "id": "c879e9ba-7a44-439d-adf2-fdee371ce22a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -271,6 +280,17 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Rotate Drag Item",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b1e62b5f-ed03-4237-9866-3fe1ca611db7",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Split Drag Item",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

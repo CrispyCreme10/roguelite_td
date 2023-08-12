@@ -50,6 +50,34 @@ public class GridInventoryUI : MonoBehaviour {
     private PlayerInputActions _playerInputActions;
 
     private void Awake() {
+        SetupRoot();
+
+        // Visual Elements
+        _gridScrollView = _root.Q<ScrollView>("GridScrollView");
+        _inventoryViewport = _gridScrollView.Q("unity-content-viewport");
+        _contentContainer = _gridScrollView.Q<VisualElement>("unity-content-container");
+        _contentContainer.style.flexDirection = FlexDirection.Row;
+        _contentContainer.style.flexWrap = Wrap.Wrap;
+        _contentContainer.style.position = Position.Relative;
+        SetupNameTooltip();
+        
+        SetupGridInventory();
+        PaintGridInventory();
+
+        // Keybinds
+        _playerInputActions = new PlayerInputActions();
+        _playerInputActions.Inventory.Enable();
+    }
+
+    private void OnEnable() {
+        _playerInputActions.Inventory.RotateDragItem.performed += RotateDragItem;
+    }
+
+    private void OnDisable() {
+        _playerInputActions.Inventory.RotateDragItem.performed -= RotateDragItem;
+    }
+
+    private void SetupRoot() {
         _root = GetComponent<UIDocument>().rootVisualElement;
         // POINTER MOVE EVENT
         _root.RegisterCallback<PointerMoveEvent>(evt => {
@@ -59,8 +87,12 @@ public class GridInventoryUI : MonoBehaviour {
             // update tooltip
             if (_isHover)
                 SetNameTooltipPosition();
-            
+
             if (!IsDragging) return;
+            
+            // hide tooltip if applicable
+            if (_itemNameTooltip.style.display == DisplayStyle.Flex)
+                HideNameTooltip();
 
             if (!_hasClearedDragSource)
                 ClearDragElementSourceStyles();
@@ -121,32 +153,8 @@ public class GridInventoryUI : MonoBehaviour {
             _isValidPlacement = false;
             _isMerge = false;
         });
-
-        // Visual Elements
-        _gridScrollView = _root.Q<ScrollView>("GridScrollView");
-        _inventoryViewport = _gridScrollView.Q("unity-content-viewport");
-        _contentContainer = _gridScrollView.Q<VisualElement>("unity-content-container");
-        _contentContainer.style.flexDirection = FlexDirection.Row;
-        _contentContainer.style.flexWrap = Wrap.Wrap;
-        _contentContainer.style.position = Position.Relative;
-        SetupNameTooltip();
-        
-        SetupGridInventory();
-        PaintGridInventory();
-
-        // Keybinds
-        _playerInputActions = new PlayerInputActions();
-        _playerInputActions.Inventory.Enable();
     }
-
-    private void OnEnable() {
-        _playerInputActions.Inventory.RotateDragItem.performed += RotateDragItem;
-    }
-
-    private void OnDisable() {
-        _playerInputActions.Inventory.RotateDragItem.performed -= RotateDragItem;
-    }
-
+    
     private void SetMousePosAdj() {
         var mousePos = Input.mousePosition;
         var mousePosAdj = new Vector2(mousePos.x, Screen.height - mousePos.y);

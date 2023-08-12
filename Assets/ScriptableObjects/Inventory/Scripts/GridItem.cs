@@ -24,7 +24,7 @@ public class GridItem : ScriptableObject {
     public float IconScale => iconScale;
     public float IconRotation => iconRotation;
     public int DefaultStackSize => defaultStackSize;
-    public bool IsContainer => isContainer;
+    public bool IsContainer => isContainer && ContainerRows > 0 && containerCols > 0;
     public int ContainerRows => containerRows;
     public int ContainerCols => containerCols;
     public Color BgColor => bgColor;
