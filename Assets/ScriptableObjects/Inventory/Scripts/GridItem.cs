@@ -10,6 +10,9 @@ public class GridItem : ScriptableObject {
     [SerializeField] private float iconScale = 1f;
     [SerializeField] private float iconRotation = 0f; // initial rotation of icon
     [SerializeField] private int defaultStackSize = 1;
+    [SerializeField] private bool isContainer = false;
+    [SerializeField] private int containerRows = 0;
+    [SerializeField] private int containerCols = 0;
     [SerializeField] private Color bgColor;
     [SerializeField] private Color statColor;
 
@@ -21,6 +24,9 @@ public class GridItem : ScriptableObject {
     public float IconScale => iconScale;
     public float IconRotation => iconRotation;
     public int DefaultStackSize => defaultStackSize;
+    public bool IsContainer => isContainer;
+    public int ContainerRows => containerRows;
+    public int ContainerCols => containerCols;
     public Color BgColor => bgColor;
     public Color StatColor => statColor;
 }
@@ -28,9 +34,10 @@ public class GridItem : ScriptableObject {
 public class StackGridItem {
     public int Amount { get; private set; }
     public GridItem GridItem { get; }
-    public bool IsRotated { get; set; }
+    public bool IsRotated { get; private set; }
     public int ColIndex { get; private set; }
     public int RowIndex { get; private set; }
+    public GridInventory GridInventory { get; }
     
     public bool IsMaxed => Amount == GridItem.DefaultStackSize;
     public int WidthAdjForRotation => !IsRotated ? GridItem.Width : GridItem.Height;
@@ -39,6 +46,9 @@ public class StackGridItem {
     public StackGridItem(GridItem gridItem, int amount) {
         GridItem = gridItem;
         Amount = amount;
+        if (GridItem.IsContainer) {
+            GridInventory = new GridInventory(GridItem.ContainerRows, GridItem.ContainerCols);
+        }
     }
 
     public void UpdateGridData(int rowIndex, int colIndex, bool isRotated) {

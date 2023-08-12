@@ -155,12 +155,12 @@ public class GridInventoryUI : MonoBehaviour {
     
     private void SetupGridInventory() {
         // Test Grid Inventory Stuff
-        _gridInventory = new GridInventory();
+        _gridInventory = new GridInventory(13, 10);
         foreach (var testGridItem in testGridItems) {
             var newItem = testGridItem.ItemName == "Gold"
                 ? new StackGridItem(testGridItem, 5_000)
                 : new StackGridItem(testGridItem, 1);
-            _gridInventory.TryAddItem(newItem, false);
+            _gridInventory.TryAddItem(newItem);
         }
     }
 
@@ -259,11 +259,17 @@ public class GridInventoryUI : MonoBehaviour {
             }
 
             itemContainer.RegisterCallback<PointerDownEvent>(evt => {
+                if (evt.button == 1) {
+                    // show context menu at mouse position
+                    // Info
+                    // Open (if container item)
+                    // Remove
+                }
+                
                 if (evt.button != 0) return;
 
                 _dragElement = new VisualElement {
                     style = {
-                        // backgroundColor = new Color(0, 0, 255, 0.05f), // DEBUG COLOR
                         visibility = Visibility.Hidden,
                         justifyContent = Justify.Center,
                         alignItems = Align.Center,

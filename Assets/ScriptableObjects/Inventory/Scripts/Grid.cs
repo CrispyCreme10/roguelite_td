@@ -26,11 +26,11 @@ public class Grid {
         return _gridArray[rowIndex, colIndex];
     }
 
-    public (int, int, int, int) TryAdd(int itemKey, int itemWidth, int itemHeight, bool isRotatedByUser) {
+    public (int, int, int, int) TryAdd(int itemKey, int itemWidth, int itemHeight) {
         // look for an open grouping of cells within the grid to place this item
         for (var row = 0; row < _gridArray.GetLength(0); row++) {
             for (var col = 0; col < _gridArray.GetLength(1); col++) {
-                if (!CanAddAtCoordinate(itemKey, row, col, itemWidth, itemHeight, isRotatedByUser)) continue;
+                if (!CanAddAtCoordinate(itemKey, row, col, itemWidth, itemHeight)) continue;
                 Add(itemKey, row, col, itemWidth, itemHeight);
                 return (row, col, itemWidth, itemHeight);
             }
@@ -43,8 +43,7 @@ public class Grid {
         Add(itemKey, rowIndex, colIndex, itemWidth, itemHeight);
     }
 
-
-    public bool CanAddAtCoordinate(int itemKey, int rowIndex, int colIndex, int itemWidth, int itemHeight, bool isRotatedByUser) {
+    public bool CanAddAtCoordinate(int itemKey, int rowIndex, int colIndex, int itemWidth, int itemHeight) {
         if (rowIndex < 0 || rowIndex + itemHeight > _rows || colIndex < 0 || colIndex + itemWidth > _cols) return false;
         for (var x = rowIndex; x < itemHeight + rowIndex; x++) {
             for (var y = colIndex; y < itemWidth + colIndex; y++) {
@@ -90,20 +89,20 @@ public class GridInventory {
     private readonly Grid _grid;
     private int _autoIncrementingIndex;
 
-    public GridInventory() {
+    public GridInventory(int rows, int cols) {
         _gridItems = new Dictionary<int, StackGridItem>();
-        _grid = new Grid(13, 10);
+        _grid = new Grid(rows, cols);
     }
 
     private void AddGridItem(StackGridItem stackGridItem) {
         _gridItems[_autoIncrementingIndex++] = stackGridItem;
     }
 
-    public bool TryAddItem(StackGridItem stackGridItem, bool isRotatedByUser) {
+    public bool TryAddItem(StackGridItem stackGridItem) {
         if (stackGridItem.Amount == 0) return false;
         var indexSnapshot = _autoIncrementingIndex;
         var (rowIndex, colIndex, width, height) =
-            _grid.TryAdd(indexSnapshot, stackGridItem.GridItem.Width, stackGridItem.GridItem.Height, isRotatedByUser);
+            _grid.TryAdd(indexSnapshot, stackGridItem.GridItem.Width, stackGridItem.GridItem.Height);
         if (rowIndex == -1 || colIndex == -1 || width == 0 || height == 0) return false;
 
         AddGridItem(stackGridItem);
@@ -185,7 +184,7 @@ public class GridInventory {
             return true;
         return gridItemKey != -1 && _grid.CanAddAtCoordinate(gridItemKey, rowIndex, colIndex,
             !isRotated ? stackGridItem.GridItem.Width : stackGridItem.GridItem.Height,
-            !isRotated ? stackGridItem.GridItem.Height : stackGridItem.GridItem.Width, isRotated);
+            !isRotated ? stackGridItem.GridItem.Height : stackGridItem.GridItem.Width);
     }
 
     private static bool IsSameCoordinate(int rowIndex, int colIndex, StackGridItem stackGridItem) {
