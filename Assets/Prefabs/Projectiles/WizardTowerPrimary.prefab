@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _DamageController: {fileID: 2266056288409847486}
-  _moveSpeed: 50
+  _moveSpeed: 75
 --- !u!114 &2266056288409847486
 MonoBehaviour:
   m_ObjectHideFlags: 0

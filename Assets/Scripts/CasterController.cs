@@ -44,24 +44,21 @@ public class CasterController : MonoBehaviour
         }
     }
 
-    public void CastProjectile(ProjectileSlot projectileSlot, Vector3 castDirection)
-    {
-        if (_cooldownMap[projectileSlot].CanCast)
+    public void CastProjectile(ProjectileSlot projectileSlot, Vector3 castDirection) {
+        if (!_cooldownMap[projectileSlot].CanCast) return;
+        try
         {
-            try
-            {
-                ProjectileSO projectileSo = _projectileMap[projectileSlot];
-                var projectile = Instantiate(projectileSo.Prefab,
-                    spawnPos.transform.position, Quaternion.identity);
-                projectile.SetMoveTowardsDir(castDirection);
-                projectile.SetCasterController(this);
-                _cooldownMap[projectileSlot].StartCooldown(projectileSo.Cooldown);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            var projectileSo = _projectileMap[projectileSlot];
+            var projectile = Instantiate(projectileSo.Prefab,
+                spawnPos.transform.position, Quaternion.identity);
+            projectile.SetMoveTowardsDir(castDirection);
+            projectile.SetCasterController(this);
+            _cooldownMap[projectileSlot].StartCooldown(projectileSo.Cooldown);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
     }
 }

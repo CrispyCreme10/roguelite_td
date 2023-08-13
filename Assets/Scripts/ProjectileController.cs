@@ -5,33 +5,33 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
-    [SerializeField] private DamageController _DamageController;
-    [SerializeField] private float _moveSpeed = 1f;
+    [SerializeField] private DamageController damageController;
+    [SerializeField] private float moveSpeed = 1f;
 
     private Vector3 _moveDirection;
     private CasterController _casterController;
 
     void OnEnable()
     {
-        _DamageController.OnDamageDeal += OnDamageDeal;
+        damageController.OnDamageDeal += OnDamageDeal;
     }
 
     void OnDisable()
     {
-        _DamageController.OnDamageDeal -= OnDamageDeal;
+        damageController.OnDamageDeal -= OnDamageDeal;
     }
 
     void Update()
     {
-        transform.Translate(Time.deltaTime * _moveSpeed * _moveDirection);
+        transform.Translate(Time.deltaTime * moveSpeed * _moveDirection);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("ON COLLISION: " + collision.gameObject.name);
-        if (_DamageController != null)
+        if (damageController != null)
         {
-            _DamageController.DealDamage(collision.collider);
+            damageController.DealDamage(collision.collider);
         }     
     }
 
@@ -46,7 +46,7 @@ public class ProjectileController : MonoBehaviour
 
     public void SetMoveTowardsDir(Vector3 dir)
     {
-        _moveDirection = dir;
+        _moveDirection = dir.normalized;
     }
 
     public void SetCasterController(CasterController casterController)
