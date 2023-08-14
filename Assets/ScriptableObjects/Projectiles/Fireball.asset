@@ -16,4 +16,4 @@ MonoBehaviour:
   description: Ball of fire to incinerate foes.
   cooldown: 0.5
   damage: 15
-  prefab: {fileID: -8095975489088626351, guid: 8db975cc964af7e29a33edfeb8e42fc0, type: 3}
+  prefab: {fileID: 80859380388798763, guid: a80451be54cf58f67821514b631bca63, type: 3}

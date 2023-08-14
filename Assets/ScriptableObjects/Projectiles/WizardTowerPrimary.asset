@@ -16,4 +16,4 @@ MonoBehaviour:
   description: 
   cooldown: 1.5
   damage: 15
-  prefab: {fileID: 2475930950198765999, guid: 099e7232ce61e8009878096a43e4beb0, type: 3}
+  prefab: {fileID: 9119512981416209220, guid: 27a7807f0bb42f87486e7b79e130657c, type: 3}

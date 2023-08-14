@@ -6338,6 +6338,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NormalEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 4526071268711371150, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7259704263113262468, guid: 4cb9aef02b3c89b73b54461c0fd19b86, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

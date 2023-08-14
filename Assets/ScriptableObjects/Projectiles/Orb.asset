@@ -16,4 +16,4 @@ MonoBehaviour:
   description: Magical orb of destruction.
   cooldown: 1
   damage: 25
-  prefab: {fileID: -8095975489088626351, guid: bd5ebf25bd331de48a173096921af067, type: 3}
+  prefab: {fileID: 5772886798900742143, guid: fb79e0996cdd1149d972b4bb87573725, type: 3}
