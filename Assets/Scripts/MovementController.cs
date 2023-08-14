@@ -14,15 +14,16 @@ public class MovementController : MonoBehaviour
         Move();
     }
 
-    private void Move()
-    {
-        if (_enemyController != null && _canMove)
-        {
-            Vector3 targetPosition = _enemyController.GetCurrentTarget().transform.position;
-            var dir = (targetPosition - transform.position).normalized;
-            transform.position += new Vector3(dir.x * _moveSpeed * Time.deltaTime,
-                dir.y * _moveSpeed * Time.deltaTime, 0f);
-        }
+    private void Move() {
+        if (_enemyController == null || !_canMove) return;
+        var targetPosition = _enemyController.GetCurrentTarget().transform.position;
+        var dir = (targetPosition - transform.position).normalized;
+        
+        
+        
+        
+        transform.position += new Vector3(dir.x * _moveSpeed * Time.deltaTime,
+            dir.y * _moveSpeed * Time.deltaTime, 0f);
     }
 
     // void MovePhysics()
